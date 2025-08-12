@@ -1,8 +1,8 @@
 namespace PassRegulaParser.Core.Handlers;
 
-public class FileChangeHandler
+public class NewRecognitionHandler
 {
-    public void OnChangeDetected(object source, FileSystemEventArgs e)
+    public void OnNewRecognition(object source, FileSystemEventArgs e)
     {
         Console.WriteLine($"Changes detected in: {e.FullPath} ({e.ChangeType})");
     }
