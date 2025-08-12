@@ -9,11 +9,11 @@ class ServiceRunner
 
     public static void Main(string[] args)
     {
-        var changeHandler = new NewRecognitionHandler();
+        var newRecognitionHandler = new NewRecognitionHandler(PathToWatch);
         var watcher = new DirWatcher(
             PathToWatch,
             FileFilter,
-            changeHandler.OnNewRecognition);
+            newRecognitionHandler.OnChangeDetected);
 
         Console.WriteLine("Watcher service started!");
 
