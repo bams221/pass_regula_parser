@@ -1,5 +1,6 @@
 ﻿using PassRegulaParser.Core.DirWatcher;
 using PassRegulaParser.Core.Handlers;
+
 namespace PassRegulaParser;
 
 class ServiceRunner

@@ -1,8 +1,10 @@
 using PassRegulaParser.Core.Dto;
+using PassRegulaParser.Core.Interfaces;
 using PassRegulaParser.Core.Utils;
 
 namespace PassRegulaParser.Core.ParserNodes;
-class DoctypeDataParserNode : NodeElement
+
+class DoctypeDataParserNode : INodeElement
 {
     private readonly JsonFileParser _jsonParser;
 

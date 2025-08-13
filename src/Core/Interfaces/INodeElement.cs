@@ -1,6 +1,8 @@
 using PassRegulaParser.Core.Dto;
 
-public interface NodeElement
+namespace PassRegulaParser.Core.Interfaces;
+
+public interface INodeElement
 {
     public PassportData Process(PassportData passportData);
 }

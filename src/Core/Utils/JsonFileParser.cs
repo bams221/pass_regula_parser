@@ -2,6 +2,7 @@ using System.Text.Json;
 using PassRegulaParser.Core.Exceptions;
 
 namespace PassRegulaParser.Core.Utils;
+
 public class JsonFileParser
 {
     private readonly JsonDocument _jsonDoc;
