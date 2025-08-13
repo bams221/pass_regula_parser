@@ -47,9 +47,17 @@ class DoctypeDataParserNode : NodeElement
 
     private static string ExtractDocumentNameFromJsonDocument(JsonDocument jsonDoc)
     {
-        var oneCandidate = jsonDoc.RootElement.GetProperty("OneCandidate");
-        var docName = oneCandidate.GetProperty("DocumentName").GetString() ?? throw new ParsingException("DocumentName is null");
-        return docName;
+        try
+        {
+            var oneCandidate = jsonDoc.RootElement.GetProperty("OneCandidate");
+            var docName = oneCandidate.GetProperty("DocumentName").GetString() ?? throw new ParsingException("DocumentName is null");
+            return docName;
+        }
+        catch (KeyNotFoundException)
+        {
+            throw new ParsingException("Key not found in json");
+        }
+        
     }
 
     public PassportData Process(PassportData passportData)

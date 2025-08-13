@@ -30,6 +30,7 @@ public class NewRecognitionHandler(string dirPath)
         catch (ParsingException ex)
         {
             Console.WriteLine("Parsign error: " + ex.Message);
+            return;
         }
 
         Console.WriteLine("Recognized passport Data: " + passportData);
