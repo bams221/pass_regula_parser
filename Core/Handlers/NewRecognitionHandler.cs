@@ -1,3 +1,7 @@
+using PassRegulaParser.Core.Dto;
+using PassRegulaParser.Core.Exceptions;
+using PassRegulaParser.Core.ParserNodes;
+
 namespace PassRegulaParser.Core.Handlers;
 
 public class NewRecognitionHandler(string dirPath)
@@ -13,25 +17,21 @@ public class NewRecognitionHandler(string dirPath)
 
     private void ProcessNewRecognition()
     {
-        string filePath = Path.Combine(_dirPath, "Doctype_Data.json");
-        // TODO: instead of printing to console, parse json and get document data field.
-        //       Also move this funtion to separate method 
+        string doctypeDataFilepath = Path.Combine(_dirPath, "ChoosenDoctype_Data.json");
+
+        PassportData passportData = new();
+
         try
         {
-            if (File.Exists(filePath))
-            {
-                string jsonContent = File.ReadAllText(filePath);
-                Console.WriteLine("Content of Doctype_Data.json:");
-                Console.WriteLine(jsonContent);
-            }
-            else
-            {
-                Console.WriteLine($"File not found: {filePath}");
-            }
+            DoctypeDataParserNode doctypeDataParserNode = new(doctypeDataFilepath);
+
+            passportData = doctypeDataParserNode.Process(passportData);
         }
-        catch (Exception ex)
+        catch (ParsingException ex)
         {
-            Console.WriteLine($"Error reading file: {ex.Message}");
+            Console.WriteLine("Parsign error: " + ex.Message);
         }
+
+        Console.WriteLine("Recognized passport Data: " + passportData);
     }
 }

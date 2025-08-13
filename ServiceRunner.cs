@@ -5,7 +5,7 @@ namespace PassRegulaParser;
 class ServiceRunner
 {
     private const string PathToWatch = "C:\\RD\\last_res";
-    private const string FileFilter = "Doctype_Data.json";
+    private const string FileFilter = "ChoosenDoctype_Data.json";
 
     public static void Main(string[] args)
     {
