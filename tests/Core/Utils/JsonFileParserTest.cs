@@ -1,0 +1,147 @@
+using PassRegulaParser.Core.Exceptions;
+using PassRegulaParser.Core.Utils;
+
+namespace PassRegulaParser.Tests.Core.Utils
+{
+    public class JsonFileParserTests : IDisposable
+    {
+        private const string TestJson = @"
+        {
+            ""user"": {
+                ""name"": ""John Doe"",
+                ""age"": 30,
+                ""address"": {
+                    ""street"": ""123 Main St"",
+                    ""city"": ""Anytown""
+                },
+                ""isActive"": true,
+                ""tags"": [""tag1"", ""tag2""]
+            },
+            ""emptyValue"": null
+        }";
+
+        private readonly string _tempFilePath;
+
+        public JsonFileParserTests()
+        {
+            _tempFilePath = Path.GetTempFileName();
+            File.WriteAllText(_tempFilePath, TestJson);
+        }
+
+        public void Dispose()
+        {
+            if (File.Exists(_tempFilePath))
+            {
+                File.Delete(_tempFilePath);
+            }
+        }
+
+        [Fact]
+        public void Constructor_WithValidFilePath_InitializesSuccessfully()
+        {
+            var exception = Record.Exception(() => new JsonFileParser(_tempFilePath));
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        public void Constructor_WithEmptyFilePath_ThrowsParsingException()
+        {
+            Assert.Throws<ParsingException>(() => new JsonFileParser(""));
+        }
+
+        [Fact]
+        public void Constructor_WithNonExistentFile_ThrowsParsingException()
+        {
+            // Arrange
+            var nonExistentPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+
+
+            Assert.Throws<ParsingException>(() => new JsonFileParser(nonExistentPath));
+        }
+
+        [Fact]
+        public void Constructor_WithInvalidJson_ThrowsParsingException()
+        {
+            // Arrange
+            var invalidJsonPath = Path.GetTempFileName();
+            File.WriteAllText(invalidJsonPath, "{ invalid json }");
+
+            try
+            {
+
+                Assert.Throws<ParsingException>(() => new JsonFileParser(invalidJsonPath));
+            }
+            finally
+            {
+                File.Delete(invalidJsonPath);
+            }
+        }
+
+        [Fact]
+        public void GetStringProperty_WithValidPath_ReturnsCorrectValue()
+        {
+            var parser = new JsonFileParser(_tempFilePath);
+
+            var result = parser.GetStringProperty("user.name");
+
+            Assert.Equal("John Doe", result);
+        }
+
+        [Fact]
+        public void GetStringProperty_WithNestedPath_ReturnsCorrectValue()
+        {
+            var parser = new JsonFileParser(_tempFilePath);
+
+            var result = parser.GetStringProperty("user.address.street");
+
+            Assert.Equal("123 Main St", result);
+        }
+
+        [Fact]
+        public void GetStringProperty_WithNonExistentPath_ThrowsParsingException()
+        {
+            var parser = new JsonFileParser(_tempFilePath);
+
+
+            Assert.Throws<ParsingException>(() => parser.GetStringProperty("user.nonexistent.property"));
+        }
+
+        [Fact]
+        public void GetStringProperty_WithNullValue_ThrowsParsingException()
+        {
+            var parser = new JsonFileParser(_tempFilePath);
+
+            Assert.Throws<ParsingException>(() => parser.GetStringProperty("emptyValue"));
+        }
+
+        [Fact]
+        public void GetStringProperty_WithNonStringValue_ThrowsParsingException()
+        {
+            var parser = new JsonFileParser(_tempFilePath);
+
+            Assert.Throws<ParsingException>(() => parser.GetStringProperty("user.age"));
+        }
+
+        [Fact]
+        public void JsonDocument_Property_ReturnsDocument()
+        {
+            var parser = new JsonFileParser(_tempFilePath);
+
+            var doc = parser.JsonDocument;
+
+            Assert.NotNull(doc);
+            Assert.True(doc.RootElement.TryGetProperty("user", out _));
+        }
+
+        [Fact]
+        public void Dispose_CanBeCalledMultipleTimes()
+        {
+            var parser = new JsonFileParser(_tempFilePath);
+
+            parser.Dispose();
+            var exception = Record.Exception(() => parser.Dispose());
+
+            Assert.Null(exception);
+        }
+    }
+}
