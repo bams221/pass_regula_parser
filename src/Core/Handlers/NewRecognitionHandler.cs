@@ -1,6 +1,7 @@
 using PassRegulaParser.Core.Dto;
 using PassRegulaParser.Core.Exceptions;
 using PassRegulaParser.Core.ParserNodes;
+using PassRegulaParser.Ui;
 
 namespace PassRegulaParser.Core.Handlers;
 
@@ -26,7 +27,7 @@ public class NewRecognitionHandler(string dirPath)
         {
             DoctypeDataParserNode doctypeDataParserNode = new(doctypeDataFilepath);
             RussianPassportParserNode russianPassportParserNode = new(textDataFilepath);
-            
+
             passportData = doctypeDataParserNode.Process(passportData);
             passportData = russianPassportParserNode.Process(passportData);
         }
@@ -37,5 +38,14 @@ public class NewRecognitionHandler(string dirPath)
         }
 
         Console.WriteLine("Recognized passport Data: " + passportData);
+
+        Thread uiThread = new(() =>
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new PassportEditForm(passportData));
+        });
+        uiThread.SetApartmentState(ApartmentState.STA);
+        uiThread.Start();
     }
 }
