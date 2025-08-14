@@ -1,6 +1,6 @@
 namespace PassRegulaParser.Core.Utils;
 
-static class PhotoUtils
+public static class PhotoUtils
 {
     public static string GetPhotoBase64FromFile(string photoFilepath)
     {
