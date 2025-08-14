@@ -43,7 +43,7 @@ public class NewRecognitionHandler(string dirPath)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new PassportEditForm(passportData));
+            Application.Run(new DocumentEditForm(passportData));
         });
         uiThread.SetApartmentState(ApartmentState.STA);
         uiThread.Start();

@@ -2,11 +2,11 @@ using PassRegulaParser.Core.Dto;
 
 namespace PassRegulaParser.Ui;
 
-public class PassportEditForm : Form
+public class DocumentEditForm : Form
 {
     private readonly PassportData _passportData;
 
-    public PassportEditForm(PassportData passportData)
+    public DocumentEditForm(PassportData passportData)
     {
         _passportData = passportData;
         InitializeComponents();
@@ -15,7 +15,7 @@ public class PassportEditForm : Form
     private void InitializeComponents()
     {
         Text = "Редактирование данных паспорта";
-        Size = new Size(400, 500);
+        Size = new Size(400, 600); // Увеличили высоту формы для фото
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         StartPosition = FormStartPosition.CenterScreen;
@@ -24,7 +24,7 @@ public class PassportEditForm : Form
         {
             Dock = DockStyle.Fill,
             ColumnCount = 2,
-            RowCount = 7,
+            RowCount = 8, // Увеличили количество строк для фото
             Padding = new Padding(10),
             AutoSize = true
         };
@@ -39,6 +39,46 @@ public class PassportEditForm : Form
         AddField(panel, "Дата рождения:", _passportData.BirthDate ?? "", 4);
         AddField(panel, "Пол:", _passportData.Gender ?? "", 5);
 
+        var photoLabel = new Label
+        {
+            Text = "Фото:",
+            Dock = DockStyle.Fill,
+            TextAlign = ContentAlignment.MiddleLeft
+        };
+
+        var photoBox = new PictureBox
+        {
+            Dock = DockStyle.Fill,
+            SizeMode = PictureBoxSizeMode.Zoom,
+            Height = 150
+        };
+
+        if (!string.IsNullOrEmpty(_passportData.PhotoBase64))
+        {
+            try
+            {
+                var imageBytes = Convert.FromBase64String(_passportData.PhotoBase64);
+                using (var ms = new MemoryStream(imageBytes))
+                {
+                    photoBox.Image = Image.FromStream(ms);
+                }
+            }
+            catch
+            {
+                photoBox.Image = null;
+                photoBox.BackColor = Color.LightGray;
+                photoBox.Text = "Не удалось загрузить фото";
+            }
+        }
+        else
+        {
+            photoBox.BackColor = Color.LightGray;
+            photoBox.Text = "Фото отсутствует";
+        }
+
+        panel.Controls.Add(photoLabel, 0, 6);
+        panel.Controls.Add(photoBox, 1, 6);
+
         var saveButton = new Button
         {
             Text = "Сохранить",
@@ -47,13 +87,12 @@ public class PassportEditForm : Form
         };
         saveButton.Click += (sender, e) =>
         {
-            MessageBox.Show("Saving data");
             DialogResult = DialogResult.OK;
             Close();
         };
 
         panel.SetColumnSpan(saveButton, 2);
-        panel.Controls.Add(saveButton, 0, 6);
+        panel.Controls.Add(saveButton, 0, 7);
 
         Controls.Add(panel);
     }
