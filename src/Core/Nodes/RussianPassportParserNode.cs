@@ -4,7 +4,7 @@ using PassRegulaParser.Core.Interfaces;
 using PassRegulaParser.Core.Utils;
 using System.Text.Json.Nodes;
 
-namespace PassRegulaParser.Core.ParserNodes;
+namespace PassRegulaParser.Core.Nodes;
 
 class RussianPassportParserNode(string doctypeDataJsonFilepath) : INodeElement
 {

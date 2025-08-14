@@ -2,7 +2,7 @@ using PassRegulaParser.Core.Dto;
 using PassRegulaParser.Core.Interfaces;
 using PassRegulaParser.Core.Utils;
 
-namespace PassRegulaParser.Core.ParserNodes;
+namespace PassRegulaParser.Core.Nodes;
 
 class DoctypeDataParserNode : INodeElement
 {

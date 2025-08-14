@@ -1,6 +1,6 @@
 using PassRegulaParser.Core.Dto;
 using PassRegulaParser.Core.Exceptions;
-using PassRegulaParser.Core.ParserNodes;
+using PassRegulaParser.Core.Nodes;
 using PassRegulaParser.Ui;
 
 namespace PassRegulaParser.Core.Handlers;
