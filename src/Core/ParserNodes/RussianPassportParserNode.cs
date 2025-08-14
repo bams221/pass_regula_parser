@@ -2,44 +2,26 @@ using PassRegulaParser.Core.Dto;
 using PassRegulaParser.Core.Exceptions;
 using PassRegulaParser.Core.Interfaces;
 using PassRegulaParser.Core.Utils;
-using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace PassRegulaParser.Core.ParserNodes;
 
 class RussianPassportParserNode(string doctypeDataJsonFilepath) : INodeElement
 {
+    private const string FieldListPath = "Text.fieldList";
     private readonly JsonFileParser _jsonParser = new(doctypeDataJsonFilepath);
 
     public PassportData Process(PassportData passportData)
     {
         try
         {
-            string serialNumber = GetFieldValue("Text.fieldList", 
-                f => f.GetProperty("fieldName").GetString() == "Document Number");
-
-            string birthDate = GetFieldValue("Text.fieldList", 
-                f => f.GetProperty("fieldName").GetString() == "Date of Birth");
-
-            string fullName = GetFieldValue("Text.fieldList", 
-                f => f.GetProperty("fieldName").GetString() == "Surname And Given Names" &&
-                     f.TryGetProperty("lcidName", out var lcidName) && 
-                     lcidName.GetString() == "Russian");
-
-            string gender = GetFieldValue("Text.fieldList", 
-                f => f.GetProperty("fieldName").GetString() == "Sex" &&
-                     f.TryGetProperty("lcidName", out var lcidName) && 
-                     lcidName.GetString() == "Russian");
-
-            string birthCity = GetFieldValue("Text.fieldList", 
-                f => f.GetProperty("fieldName").GetString() == "Place of Birth");
-
-            passportData.SerialNumber = serialNumber;
-            passportData.BirthDate = birthDate;
-            passportData.FullName = fullName;
-            passportData.BirthCity = birthCity;
-            passportData.Gender = gender;
-
-
+            var fieldList = (_jsonParser.GetNodeByPath(FieldListPath)?.AsArray()) ??
+                throw new ParsingException($"Field list not found at path: {FieldListPath}");
+            passportData.SerialNumber = FindFieldValue(fieldList, "Document Number");
+            passportData.BirthDate = FindFieldValue(fieldList, "Date of Birth");
+            passportData.FullName = FindFieldValue(fieldList, "Surname And Given Names", "Russian");
+            passportData.Gender = FindFieldValue(fieldList, "Sex", "Russian");
+            passportData.BirthCity = FindFieldValue(fieldList, "Place of Birth", "Russian");
 
             return passportData;
         }
@@ -49,33 +31,21 @@ class RussianPassportParserNode(string doctypeDataJsonFilepath) : INodeElement
         }
     }
 
-    private string GetFieldValue(string arrayPath, Func<JsonElement, bool> predicate)
+    private static string FindFieldValue(JsonArray fieldList, string fieldName, string? language = null)
     {
-        try
+        foreach (var field in fieldList)
         {
-            var currentElement = _jsonParser.JsonDocument.RootElement;
+            if (field == null) continue;
 
-            foreach (var property in arrayPath.Split('.'))
-            {
-                currentElement = currentElement.GetProperty(property);
-            }
+            var fieldNode = field.AsObject();
+            if (fieldNode["fieldName"]?.GetValue<string>() != fieldName)
+                continue;
 
-            foreach (var field in currentElement.EnumerateArray())
-            {
-                if (predicate(field))
-                {
-                    if (field.TryGetProperty("value", out var valueProp))
-                    {
-                        return valueProp.GetString() ?? string.Empty;
-                    }
-                }
-            }
+            if (language != null && fieldNode["lcidName"]?.GetValue<string>() != language)
+                continue;
 
-            return string.Empty;
+            return fieldNode["value"]?.GetValue<string>() ?? string.Empty;
         }
-        catch (Exception ex)
-        {
-            throw new ParsingException("Error extracting field value from JSON", ex);
-        }
+        return string.Empty;
     }
 }

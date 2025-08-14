@@ -1,18 +1,22 @@
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using PassRegulaParser.Core.Exceptions;
 
 namespace PassRegulaParser.Core.Utils;
 
-public class JsonFileParser
+public class JsonFileParser : IDisposable
 {
-    private readonly JsonDocument _jsonDoc;
+    private readonly JsonNode _rootNode;
+    private readonly FileStream? _fileStream;
 
     public JsonFileParser(string jsonFilepath)
     {
         CheckJsonFilePath(jsonFilepath);
         try
         {
-            _jsonDoc = ParseJson(jsonFilepath);
+            _fileStream = File.OpenRead(jsonFilepath);
+            _rootNode = JsonNode.Parse(_fileStream) ??
+                        throw new ParsingException("JSON content is null");
         }
         catch (JsonException ex)
         {
@@ -22,9 +26,13 @@ public class JsonFileParser
         {
             throw new ParsingException("Error parsing JSON file", ex);
         }
+        finally
+        {
+            _fileStream?.Dispose();
+        }
     }
 
-    public JsonDocument JsonDocument => _jsonDoc;
+    public JsonNode RootNode => _rootNode;
 
     private static void CheckJsonFilePath(string filepath)
     {
@@ -39,24 +47,12 @@ public class JsonFileParser
         }
     }
 
-    private static JsonDocument ParseJson(string filepath)
-    {
-        string jsonContent = File.ReadAllText(filepath);
-        return JsonDocument.Parse(jsonContent);
-    }
-
     public string GetStringProperty(string propertyPath)
     {
         try
         {
-            JsonElement currentElement = _jsonDoc.RootElement;
-
-            foreach (var property in propertyPath.Split('.'))
-            {
-                currentElement = currentElement.GetProperty(property);
-            }
-
-            return currentElement.GetString() ??
+            JsonNode? node = GetNodeByPath(propertyPath);
+            return node?.GetValue<string>() ??
                    throw new ParsingException($"Property '{propertyPath}' is null");
         }
         catch (KeyNotFoundException)
@@ -68,9 +64,20 @@ public class JsonFileParser
             throw new ParsingException($"Invalid operation while accessing property '{propertyPath}'", ex);
         }
     }
+    public JsonNode? GetNodeByPath(string propertyPath)
+    {
+        JsonNode? currentNode = _rootNode;
+        foreach (var property in propertyPath.Split('.'))
+        {
+            currentNode = currentNode?[property];
+            if (currentNode == null) return null;
+        }
+        return currentNode;
+    }
 
     public void Dispose()
     {
-        _jsonDoc?.Dispose();
+        _fileStream?.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

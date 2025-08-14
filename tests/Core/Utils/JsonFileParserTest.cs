@@ -52,23 +52,18 @@ namespace PassRegulaParser.Tests.Core.Utils
         [Fact]
         public void Constructor_WithNonExistentFile_ThrowsParsingException()
         {
-            // Arrange
             var nonExistentPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-
-
             Assert.Throws<ParsingException>(() => new JsonFileParser(nonExistentPath));
         }
 
         [Fact]
         public void Constructor_WithInvalidJson_ThrowsParsingException()
         {
-            // Arrange
             var invalidJsonPath = Path.GetTempFileName();
             File.WriteAllText(invalidJsonPath, "{ invalid json }");
 
             try
             {
-
                 Assert.Throws<ParsingException>(() => new JsonFileParser(invalidJsonPath));
             }
             finally
@@ -81,9 +76,7 @@ namespace PassRegulaParser.Tests.Core.Utils
         public void GetStringProperty_WithValidPath_ReturnsCorrectValue()
         {
             var parser = new JsonFileParser(_tempFilePath);
-
             var result = parser.GetStringProperty("user.name");
-
             Assert.Equal("John Doe", result);
         }
 
@@ -91,9 +84,7 @@ namespace PassRegulaParser.Tests.Core.Utils
         public void GetStringProperty_WithNestedPath_ReturnsCorrectValue()
         {
             var parser = new JsonFileParser(_tempFilePath);
-
             var result = parser.GetStringProperty("user.address.street");
-
             Assert.Equal("123 Main St", result);
         }
 
@@ -101,8 +92,6 @@ namespace PassRegulaParser.Tests.Core.Utils
         public void GetStringProperty_WithNonExistentPath_ThrowsParsingException()
         {
             var parser = new JsonFileParser(_tempFilePath);
-
-
             Assert.Throws<ParsingException>(() => parser.GetStringProperty("user.nonexistent.property"));
         }
 
@@ -110,7 +99,6 @@ namespace PassRegulaParser.Tests.Core.Utils
         public void GetStringProperty_WithNullValue_ThrowsParsingException()
         {
             var parser = new JsonFileParser(_tempFilePath);
-
             Assert.Throws<ParsingException>(() => parser.GetStringProperty("emptyValue"));
         }
 
@@ -118,29 +106,32 @@ namespace PassRegulaParser.Tests.Core.Utils
         public void GetStringProperty_WithNonStringValue_ThrowsParsingException()
         {
             var parser = new JsonFileParser(_tempFilePath);
-
             Assert.Throws<ParsingException>(() => parser.GetStringProperty("user.age"));
         }
 
         [Fact]
-        public void JsonDocument_Property_ReturnsDocument()
+        public void GetNodeByPath_WithValidPath_ReturnsCorrectNode()
         {
             var parser = new JsonFileParser(_tempFilePath);
+            var node = parser.GetNodeByPath("user.address");
+            Assert.NotNull(node);
+            Assert.Equal("123 Main St", node["street"]?.GetValue<string>());
+        }
 
-            var doc = parser.JsonDocument;
-
-            Assert.NotNull(doc);
-            Assert.True(doc.RootElement.TryGetProperty("user", out _));
+        [Fact]
+        public void GetNodeByPath_WithNonExistentPath_ReturnsNull()
+        {
+            var parser = new JsonFileParser(_tempFilePath);
+            var node = parser.GetNodeByPath("user.nonexistent.property");
+            Assert.Null(node);
         }
 
         [Fact]
         public void Dispose_CanBeCalledMultipleTimes()
         {
             var parser = new JsonFileParser(_tempFilePath);
-
             parser.Dispose();
             var exception = Record.Exception(() => parser.Dispose());
-
             Assert.Null(exception);
         }
     }
