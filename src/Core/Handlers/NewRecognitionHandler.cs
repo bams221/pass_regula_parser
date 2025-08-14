@@ -18,14 +18,17 @@ public class NewRecognitionHandler(string dirPath)
     private void ProcessNewRecognition()
     {
         string doctypeDataFilepath = Path.Combine(_dirPath, "ChoosenDoctype_Data.json");
+        string textDataFilepath = Path.Combine(_dirPath, "Text_Data.json");
 
         PassportData passportData = new();
 
         try
         {
             DoctypeDataParserNode doctypeDataParserNode = new(doctypeDataFilepath);
-
+            RussianPassportParserNode russianPassportParserNode = new(textDataFilepath);
+            
             passportData = doctypeDataParserNode.Process(passportData);
+            passportData = russianPassportParserNode.Process(passportData);
         }
         catch (ParsingException ex)
         {
