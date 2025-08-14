@@ -20,6 +20,7 @@ public class NewRecognitionHandler(string dirPath)
     {
         string doctypeDataFilepath = Path.Combine(_dirPath, "ChoosenDoctype_Data.json");
         string textDataFilepath = Path.Combine(_dirPath, "Text_Data.json");
+        string photoFilepath = Path.Combine(_dirPath, "Photo.jpg");
 
         PassportData passportData = new();
 
@@ -27,9 +28,11 @@ public class NewRecognitionHandler(string dirPath)
         {
             DoctypeDataParserNode doctypeDataParserNode = new(doctypeDataFilepath);
             RussianPassportParserNode russianPassportParserNode = new(textDataFilepath);
+            PhotoImageNode photoImageNode = new(photoFilepath);
 
             passportData = doctypeDataParserNode.Process(passportData);
             passportData = russianPassportParserNode.Process(passportData);
+            passportData = photoImageNode.Process(passportData);
         }
         catch (ParsingException ex)
         {
