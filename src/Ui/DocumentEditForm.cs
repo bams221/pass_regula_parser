@@ -14,17 +14,17 @@ public class DocumentEditForm : Form
 
     private void InitializeComponents()
     {
-        Text = "Редактирование данных паспорта";
-        Size = new Size(400, 600); // Увеличили высоту формы для фото
+        Text = "Данные отсканированного документа";
+        Size = new Size(400, 600);
         FormBorderStyle = FormBorderStyle.FixedDialog;
-        MaximizeBox = false;
+        MaximizeBox = true;
         StartPosition = FormStartPosition.CenterScreen;
 
         var panel = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             ColumnCount = 2,
-            RowCount = 8, // Увеличили количество строк для фото
+            RowCount = 8,
             Padding = new Padding(10),
             AutoSize = true
         };
@@ -32,12 +32,12 @@ public class DocumentEditForm : Form
         panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
         panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
 
-        AddField(panel, "Тип документа:", _passportData.DocumentType ?? "", 0);
-        AddField(panel, "ФИО:", _passportData.FullName ?? "", 1);
-        AddField(panel, "Серия/номер:", _passportData.SerialNumber ?? "", 2);
-        AddField(panel, "Город рождения:", _passportData.BirthCity ?? "", 3);
-        AddField(panel, "Дата рождения:", _passportData.BirthDate ?? "", 4);
-        AddField(panel, "Пол:", _passportData.Gender ?? "", 5);
+        AddLabel(panel, "Тип документа:", _passportData.DocumentType ?? "-", 0);
+        AddField(panel, "ФИО:", _passportData.FullName ?? "-", 1);
+        AddField(panel, "Серия/номер:", _passportData.SerialNumber ?? "-", 2);
+        AddField(panel, "Город рождения:", _passportData.BirthCity ?? "-", 3);
+        AddField(panel, "Дата рождения:", _passportData.BirthDate ?? "-", 4);
+        AddField(panel, "Пол:", _passportData.Gender ?? "-", 5);
 
         var photoLabel = new Label
         {
@@ -97,7 +97,7 @@ public class DocumentEditForm : Form
         Controls.Add(panel);
     }
 
-    private void AddField(TableLayoutPanel panel, string labelText, string value, int row)
+    private static void AddField(TableLayoutPanel panel, string labelText, string value, int row)
     {
         var label = new Label
         {
@@ -115,5 +115,25 @@ public class DocumentEditForm : Form
 
         panel.Controls.Add(label, 0, row);
         panel.Controls.Add(textBox, 1, row);
+    }
+
+    private static void AddLabel(TableLayoutPanel panel, string labelText, string value, int row)
+    {
+        var labelTitle = new Label
+        {
+            Text = labelText,
+            Dock = DockStyle.Fill,
+            TextAlign = ContentAlignment.MiddleLeft
+        };
+
+        var labelValue = new Label
+        {
+            Text = value,
+            Dock = DockStyle.Fill,
+            TextAlign = ContentAlignment.MiddleLeft
+        };
+
+        panel.Controls.Add(labelTitle, 0, row);
+        panel.Controls.Add(labelValue, 1, row);
     }
 }
