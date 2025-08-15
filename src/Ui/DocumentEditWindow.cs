@@ -1,128 +1,251 @@
 using PassRegulaParser.Model;
 using PassRegulaParser.Services;
 
-namespace PassRegulaParser.Ui;
-
-public class DocumentEditWindow : Form
+namespace PassRegulaParser.Ui
 {
-    private readonly PassportData _documentData;
-
-    public DocumentEditWindow(PassportData passportData)
+    public class DocumentEditWindow : Form
     {
-        _documentData = passportData;
-        InitializeComponents();
-    }
+        private readonly PassportData _documentData;
+        private readonly TableLayoutPanel _mainPanel;
+        private readonly Dictionary<string, Control> _fieldControls = [];
 
-    private void InitializeComponents()
-    {
-        Text = "Данные отсканированного документа";
-        Size = new Size(400, 600);
-        FormBorderStyle = FormBorderStyle.FixedDialog;
-        MaximizeBox = true;
-        StartPosition = FormStartPosition.CenterScreen;
-
-        var panel = new TableLayoutPanel
+        public DocumentEditWindow(PassportData passportData)
         {
-            Dock = DockStyle.Fill,
-            ColumnCount = 2,
-            RowCount = 9,
-            Padding = new Padding(10),
-            AutoSize = true
-        };
-
-        panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-        panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
-
-        ControlHelper.AddLabel(panel, "Тип документа:", _documentData.DocumentType ?? "", 0);
-        ControlHelper.AddField(panel, "ФИО:", _documentData.FullName ?? "", 1);
-        ControlHelper.AddField(panel, "Серия/номер:", _documentData.SerialNumber ?? "", 2);
-        ControlHelper.AddField(panel, "Город рождения:", _documentData.BirthCity ?? "", 3);
-        ControlHelper.AddField(panel, "Дата рождения:", _documentData.BirthDate ?? "", 4);
-        ControlHelper.AddField(panel, "Пол:", _documentData.Gender ?? "", 5);
-        ControlHelper.AddField(panel, "Описание:", _documentData.Description ?? "", 6);
-
-        var photoLabel = new Label
-        {
-            Text = "Фото:",
-            Dock = DockStyle.Fill,
-            TextAlign = ContentAlignment.MiddleLeft
-        };
-
-        var photoBox = new PictureBox
-        {
-            Dock = DockStyle.Fill,
-            SizeMode = PictureBoxSizeMode.Zoom,
-            Height = 150
-        };
-
-        if (!string.IsNullOrEmpty(_documentData.PhotoBase64))
-        {
-            try
-            {
-                byte[]? imageBytes = Convert.FromBase64String(_documentData.PhotoBase64);
-                using var ms = new MemoryStream(imageBytes);
-                photoBox.Image = Image.FromStream(ms);
-            }
-            catch
-            {
-                photoBox.Image = null;
-                photoBox.BackColor = Color.LightGray;
-                photoBox.Text = "Не удалось загрузить фото";
-            }
-        }
-        else
-        {
-            photoBox.BackColor = Color.LightGray;
-            photoBox.Text = "Фото отсутствует";
+            _documentData = passportData;
+            InitializeWindowProperties();
+            _mainPanel = CreateMainPanel();
+            InitializeFields();
+            InitializeSaveButton();
+            Controls.Add(_mainPanel);
         }
 
-        panel.Controls.Add(photoLabel, 0, 7);
-        panel.Controls.Add(photoBox, 1, 7);
-
-        var saveButton = new Button
+        private void InitializeWindowProperties()
         {
-            Text = "Сохранить",
-            Dock = DockStyle.Bottom,
-            Height = 40
-        };
-        saveButton.Click += (sender, e) => SaveButton_Click();
+            Text = "Данные отсканированного документа";
+            Size = new Size(450, 650);
+            MinimumSize = new Size(400, 500);
+            FormBorderStyle = FormBorderStyle.Sizable;
+            MaximizeBox = true;
+            StartPosition = FormStartPosition.CenterScreen;
+        }
 
-        panel.SetColumnSpan(saveButton, 2);
-        panel.Controls.Add(saveButton, 0, 8);
-
-        Controls.Add(panel);
-    }
-
-    private void SaveButton_Click()
-    {
-        UpdateDocumentDataFromTextBlocks();
-        DocumentDataSaver.SaveToJson(_documentData);
-        CloseWindow();
-    }
-
-    private void UpdateDocumentDataFromTextBlocks()
-    {
-        foreach (Control control in Controls[0].Controls)
+        private TableLayoutPanel CreateMainPanel()
         {
-            if (control is TextBox textBox)
+            return new TableLayoutPanel
             {
-                var row = ((TableLayoutPanel)Controls[0]).GetRow(textBox);
-                switch (row)
+                Dock = DockStyle.Fill,
+                ColumnCount = 2,
+                Padding = new Padding(10),
+                AutoScroll = true
+            };
+        }
+
+        private void InitializeFields()
+        {
+            // Настройка столбцов
+            _mainPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+            _mainPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
+
+            // Добавление полей документа
+            AddReadOnlyField("Тип документа:", nameof(_documentData.DocumentType));
+            AddEditableField("ФИО:", nameof(_documentData.FullName));
+            AddEditableField("Серия/номер:", nameof(_documentData.SerialNumber));
+            AddEditableField("Город рождения:", nameof(_documentData.BirthCity));
+            AddEditableField("Дата рождения:", nameof(_documentData.BirthDate));
+            AddEditableField("Пол:", nameof(_documentData.Gender));
+            AddEditableField("Описание:", nameof(_documentData.Description), true);
+            AddPhotoField();
+        }
+
+        private void AddReadOnlyField(string labelText, string propertyName)
+        {
+            var propertyValue = GetPropertyValue(propertyName)?.ToString() ?? "";
+            var rowIndex = _mainPanel.RowCount;
+            
+            _mainPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            _mainPanel.RowCount++;
+
+            var label = new Label
+            {
+                Text = labelText,
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Margin = new Padding(0, 5, 10, 5)
+            };
+
+            var valueLabel = new Label
+            {
+                Text = propertyValue,
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Margin = new Padding(0, 5, 0, 5)
+            };
+
+            _mainPanel.Controls.Add(label, 0, rowIndex);
+            _mainPanel.Controls.Add(valueLabel, 1, rowIndex);
+            _fieldControls.Add(propertyName, valueLabel);
+        }
+
+        private void AddEditableField(string labelText, string propertyName, bool isMultiline = false)
+        {
+            var propertyValue = GetPropertyValue(propertyName)?.ToString() ?? "";
+            var rowIndex = _mainPanel.RowCount;
+            
+            _mainPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            _mainPanel.RowCount++;
+
+            var label = new Label
+            {
+                Text = labelText,
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Margin = new Padding(0, 5, 10, 5)
+            };
+
+            Control inputControl;
+            
+            if (isMultiline)
+            {
+                inputControl = new TextBox
                 {
-                    case 1: _documentData.FullName = textBox.Text; break;
-                    case 2: _documentData.SerialNumber = textBox.Text; break;
-                    case 3: _documentData.BirthCity = textBox.Text; break;
-                    case 4: _documentData.BirthDate = textBox.Text; break;
-                    case 5: _documentData.Gender = textBox.Text; break;
-                    case 6: _documentData.Description = textBox.Text; break;
+                    Text = propertyValue,
+                    Dock = DockStyle.Fill,
+                    Multiline = true,
+                    ScrollBars = ScrollBars.Vertical,
+                    Height = 60,
+                    Margin = new Padding(0, 5, 0, 5)
+                };
+            }
+            else
+            {
+                inputControl = new TextBox
+                {
+                    Text = propertyValue,
+                    Dock = DockStyle.Fill,
+                    Margin = new Padding(0, 5, 0, 5)
+                };
+            }
+
+            _mainPanel.Controls.Add(label, 0, rowIndex);
+            _mainPanel.Controls.Add(inputControl, 1, rowIndex);
+            _fieldControls.Add(propertyName, inputControl);
+        }
+
+        private void AddPhotoField()
+        {
+            var rowIndex = _mainPanel.RowCount;
+            _mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 160F));
+            _mainPanel.RowCount++;
+
+            var photoLabel = new Label
+            {
+                Text = "Фото:",
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Margin = new Padding(0, 5, 10, 5)
+            };
+
+            var photoBox = new PictureBox
+            {
+                Dock = DockStyle.Fill,
+                SizeMode = PictureBoxSizeMode.Zoom
+            };
+
+            if (!string.IsNullOrEmpty(_documentData.PhotoBase64))
+            {
+                try
+                {
+                    byte[]? imageBytes = Convert.FromBase64String(_documentData.PhotoBase64);
+                    using var ms = new MemoryStream(imageBytes);
+                    photoBox.Image = Image.FromStream(ms);
+                }
+                catch
+                {
+                    SetErrorState(photoBox, "Не удалось загрузить фото");
+                }
+            }
+            else
+            {
+                SetErrorState(photoBox, "Фото отсутствует");
+            }
+
+            _mainPanel.Controls.Add(photoLabel, 0, rowIndex);
+            _mainPanel.Controls.Add(photoBox, 1, rowIndex);
+            _fieldControls.Add(nameof(_documentData.PhotoBase64), photoBox);
+        }
+
+        private void SetErrorState(PictureBox photoBox, string message)
+        {
+            photoBox.Image = null;
+            photoBox.BackColor = Color.LightGray;
+            photoBox.Paint += (sender, e) =>
+            {
+                using var font = new Font("Arial", 9);
+                var textSize = e.Graphics.MeasureString(message, font);
+                var x = (photoBox.Width - textSize.Width) / 2;
+                var y = (photoBox.Height - textSize.Height) / 2;
+                e.Graphics.DrawString(message, font, Brushes.Black, x, y);
+            };
+        }
+
+        private void InitializeSaveButton()
+        {
+            var rowIndex = _mainPanel.RowCount;
+            _mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+            _mainPanel.RowCount++;
+
+            var saveButton = new Button
+            {
+                Text = "Сохранить",
+                Dock = DockStyle.Fill,
+                Height = 40,
+                Margin = new Padding(0, 10, 0, 0)
+            };
+            saveButton.Click += (sender, e) => SaveButton_Click();
+
+            _mainPanel.SetColumnSpan(saveButton, 2);
+            _mainPanel.Controls.Add(saveButton, 0, rowIndex);
+        }
+
+        private void SaveButton_Click()
+        {
+            UpdateDocumentDataFromControls();
+            DocumentDataSaver.SaveToJson(_documentData);
+            CloseWindow();
+        }
+
+        private void UpdateDocumentDataFromControls()
+        {
+            foreach (var field in _fieldControls)
+            {
+                var control = field.Value;
+                var value = control is TextBox textBox ? textBox.Text :
+                           control is Label label ? label.Text : 
+                           null;
+
+                if (value != null)
+                {
+                    SetPropertyValue(field.Key, value);
                 }
             }
         }
-    }
 
-    private void CloseWindow()
-    {
-        DialogResult = DialogResult.OK;
-        Close();
+        private object? GetPropertyValue(string propertyName)
+        {
+            var property = _documentData.GetType().GetProperty(propertyName.Replace("_documentData.", ""));
+            return property?.GetValue(_documentData);
+        }
+
+        private void SetPropertyValue(string propertyName, object value)
+        {
+            var property = _documentData.GetType().GetProperty(propertyName.Replace("_documentData.", ""));
+            property?.SetValue(_documentData, value);
+        }
+
+        private void CloseWindow()
+        {
+            DialogResult = DialogResult.OK;
+            Close();
+        }
     }
 }
