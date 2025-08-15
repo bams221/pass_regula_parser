@@ -9,6 +9,7 @@ public class PassportData
     public string? BirthDate { get; set; }
     public string? Gender { get; set; }
     public string? PhotoBase64 { get; set; }
+    public string? Description { get; set; }
 
     public override string ToString() =>
         $"Type: {DocumentType}, FullName: {FullName}, SerialNumber: {SerialNumber}, BirthCity: {BirthCity}, BirthDate: {BirthDate}, Gender: {Gender}";

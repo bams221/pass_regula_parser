@@ -24,7 +24,7 @@ public class DocumentEditForm : Form
         {
             Dock = DockStyle.Fill,
             ColumnCount = 2,
-            RowCount = 8,
+            RowCount = 9,
             Padding = new Padding(10),
             AutoSize = true
         };
@@ -32,12 +32,13 @@ public class DocumentEditForm : Form
         panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
         panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
 
-        AddLabel(panel, "Тип документа:", _passportData.DocumentType ?? "-", 0);
-        AddField(panel, "ФИО:", _passportData.FullName ?? "-", 1);
-        AddField(panel, "Серия/номер:", _passportData.SerialNumber ?? "-", 2);
-        AddField(panel, "Город рождения:", _passportData.BirthCity ?? "-", 3);
-        AddField(panel, "Дата рождения:", _passportData.BirthDate ?? "-", 4);
-        AddField(panel, "Пол:", _passportData.Gender ?? "-", 5);
+        AddLabel(panel, "Тип документа:", _passportData.DocumentType ?? "", 0);
+        AddField(panel, "ФИО:", _passportData.FullName ?? "", 1);
+        AddField(panel, "Серия/номер:", _passportData.SerialNumber ?? "", 2);
+        AddField(panel, "Город рождения:", _passportData.BirthCity ?? "", 3);
+        AddField(panel, "Дата рождения:", _passportData.BirthDate ?? "", 4);
+        AddField(panel, "Пол:", _passportData.Gender ?? "", 5);
+        AddField(panel, "Описание:", _passportData.Description ?? "", 6);
 
         var photoLabel = new Label
         {
@@ -76,8 +77,8 @@ public class DocumentEditForm : Form
             photoBox.Text = "Фото отсутствует";
         }
 
-        panel.Controls.Add(photoLabel, 0, 6);
-        panel.Controls.Add(photoBox, 1, 6);
+        panel.Controls.Add(photoLabel, 0, 7);
+        panel.Controls.Add(photoBox, 1, 7);
 
         var saveButton = new Button
         {
@@ -92,7 +93,7 @@ public class DocumentEditForm : Form
         };
 
         panel.SetColumnSpan(saveButton, 2);
-        panel.Controls.Add(saveButton, 0, 7);
+        panel.Controls.Add(saveButton, 0, 8);
 
         Controls.Add(panel);
     }
