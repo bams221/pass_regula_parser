@@ -1,4 +1,4 @@
-using PassRegulaParser.Core.Dto;
+using PassRegulaParser.Model;
 
 namespace PassRegulaParser.Core.Interfaces;
 

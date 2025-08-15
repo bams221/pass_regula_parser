@@ -1,6 +1,6 @@
-using PassRegulaParser.Core.Dto;
 using PassRegulaParser.Core.Interfaces;
 using PassRegulaParser.Core.Utils;
+using PassRegulaParser.Model;
 
 namespace PassRegulaParser.Core.Nodes;
 

@@ -1,4 +1,4 @@
-namespace PassRegulaParser.Core.Dto;
+namespace PassRegulaParser.Model;
 
 public class PassportData
 {

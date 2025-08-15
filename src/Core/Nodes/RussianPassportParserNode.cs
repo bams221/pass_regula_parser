@@ -1,7 +1,7 @@
-using PassRegulaParser.Core.Dto;
 using PassRegulaParser.Core.Exceptions;
 using PassRegulaParser.Core.Interfaces;
 using PassRegulaParser.Core.Utils;
+using PassRegulaParser.Model;
 using System.Text.Json.Nodes;
 
 namespace PassRegulaParser.Core.Nodes;
