@@ -1,3 +1,4 @@
+using System.Text.Json;
 using PassRegulaParser.Core.Dto;
 
 namespace PassRegulaParser.Ui;
@@ -86,16 +87,63 @@ public class DocumentEditForm : Form
             Dock = DockStyle.Bottom,
             Height = 40
         };
-        saveButton.Click += (sender, e) =>
-        {
-            DialogResult = DialogResult.OK;
-            Close();
-        };
+        saveButton.Click += (sender, e) => SaveButton_Click(e);
 
         panel.SetColumnSpan(saveButton, 2);
         panel.Controls.Add(saveButton, 0, 8);
 
         Controls.Add(panel);
+    }
+
+    private void SaveButton_Click(EventArgs e)
+    {
+        // Собираем данные из текстбоксов
+        foreach (Control control in Controls[0].Controls)
+        {
+            if (control is TextBox textBox)
+            {
+                var row = ((TableLayoutPanel)Controls[0]).GetRow(textBox);
+                switch (row)
+                {
+                    case 1: _passportData.FullName = textBox.Text; break;
+                    case 2: _passportData.SerialNumber = textBox.Text; break;
+                    case 3: _passportData.BirthCity = textBox.Text; break;
+                    case 4: _passportData.BirthDate = textBox.Text; break;
+                    case 5: _passportData.Gender = textBox.Text; break;
+                    case 6: _passportData.Description = textBox.Text; break;
+                }
+            }
+        }
+
+        // Сохраняем в JSON
+        SaveToJson(_passportData);
+
+        DialogResult = DialogResult.OK;
+        Close();
+    }
+
+    private void SaveToJson(PassportData data)
+    {
+        var options = new JsonSerializerOptions
+        {
+            WriteIndented = true,
+            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        };
+
+        string json = JsonSerializer.Serialize(data, options);
+
+        var saveFileDialog = new SaveFileDialog
+        {
+            Filter = "JSON files (*.json)|*.json",
+            Title = "Сохранить данные паспорта",
+            FileName = $"{data.FullName?.Replace(" ", "_")}_passport.json"
+        };
+
+        if (saveFileDialog.ShowDialog() == DialogResult.OK)
+        {
+            File.WriteAllText(saveFileDialog.FileName, json, System.Text.Encoding.UTF8);
+            MessageBox.Show("Данные успешно сохранены!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 
     private static void AddField(TableLayoutPanel panel, string labelText, string value, int row)
