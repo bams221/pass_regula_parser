@@ -1,15 +1,16 @@
 using System.Text.Json;
 using PassRegulaParser.Model;
+using PassRegulaParser.Services;
 
 namespace PassRegulaParser.Ui;
 
 public class DocumentEditForm : Form
 {
-    private readonly PassportData _passportData;
+    private PassportData _documentData;
 
     public DocumentEditForm(PassportData passportData)
     {
-        _passportData = passportData;
+        _documentData = passportData;
         InitializeComponents();
     }
 
@@ -33,13 +34,13 @@ public class DocumentEditForm : Form
         panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
         panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
 
-        AddLabel(panel, "Тип документа:", _passportData.DocumentType ?? "", 0);
-        AddField(panel, "ФИО:", _passportData.FullName ?? "", 1);
-        AddField(panel, "Серия/номер:", _passportData.SerialNumber ?? "", 2);
-        AddField(panel, "Город рождения:", _passportData.BirthCity ?? "", 3);
-        AddField(panel, "Дата рождения:", _passportData.BirthDate ?? "", 4);
-        AddField(panel, "Пол:", _passportData.Gender ?? "", 5);
-        AddField(panel, "Описание:", _passportData.Description ?? "", 6);
+        AddLabel(panel, "Тип документа:", _documentData.DocumentType ?? "", 0);
+        AddField(panel, "ФИО:", _documentData.FullName ?? "", 1);
+        AddField(panel, "Серия/номер:", _documentData.SerialNumber ?? "", 2);
+        AddField(panel, "Город рождения:", _documentData.BirthCity ?? "", 3);
+        AddField(panel, "Дата рождения:", _documentData.BirthDate ?? "", 4);
+        AddField(panel, "Пол:", _documentData.Gender ?? "", 5);
+        AddField(panel, "Описание:", _documentData.Description ?? "", 6);
 
         var photoLabel = new Label
         {
@@ -55,11 +56,11 @@ public class DocumentEditForm : Form
             Height = 150
         };
 
-        if (!string.IsNullOrEmpty(_passportData.PhotoBase64))
+        if (!string.IsNullOrEmpty(_documentData.PhotoBase64))
         {
             try
             {
-                var imageBytes = Convert.FromBase64String(_passportData.PhotoBase64);
+                var imageBytes = Convert.FromBase64String(_documentData.PhotoBase64);
                 using (var ms = new MemoryStream(imageBytes))
                 {
                     photoBox.Image = Image.FromStream(ms);
@@ -87,7 +88,7 @@ public class DocumentEditForm : Form
             Dock = DockStyle.Bottom,
             Height = 40
         };
-        saveButton.Click += (sender, e) => SaveButton_Click(e);
+        saveButton.Click += (sender, e) => SaveButton_Click();
 
         panel.SetColumnSpan(saveButton, 2);
         panel.Controls.Add(saveButton, 0, 8);
@@ -95,9 +96,18 @@ public class DocumentEditForm : Form
         Controls.Add(panel);
     }
 
-    private void SaveButton_Click(EventArgs e)
+    private void SaveButton_Click()
     {
-        // Собираем данные из текстбоксов
+        UpdateDocumentDataFromTextBlocks();
+        
+        DocumentDataSaver.SaveToJson(_documentData);
+
+        DialogResult = DialogResult.OK;
+        Close();
+    }
+
+    private void UpdateDocumentDataFromTextBlocks()
+    {
         foreach (Control control in Controls[0].Controls)
         {
             if (control is TextBox textBox)
@@ -105,44 +115,14 @@ public class DocumentEditForm : Form
                 var row = ((TableLayoutPanel)Controls[0]).GetRow(textBox);
                 switch (row)
                 {
-                    case 1: _passportData.FullName = textBox.Text; break;
-                    case 2: _passportData.SerialNumber = textBox.Text; break;
-                    case 3: _passportData.BirthCity = textBox.Text; break;
-                    case 4: _passportData.BirthDate = textBox.Text; break;
-                    case 5: _passportData.Gender = textBox.Text; break;
-                    case 6: _passportData.Description = textBox.Text; break;
+                    case 1: _documentData.FullName = textBox.Text; break;
+                    case 2: _documentData.SerialNumber = textBox.Text; break;
+                    case 3: _documentData.BirthCity = textBox.Text; break;
+                    case 4: _documentData.BirthDate = textBox.Text; break;
+                    case 5: _documentData.Gender = textBox.Text; break;
+                    case 6: _documentData.Description = textBox.Text; break;
                 }
             }
-        }
-
-        // Сохраняем в JSON
-        SaveToJson(_passportData);
-
-        DialogResult = DialogResult.OK;
-        Close();
-    }
-
-    private void SaveToJson(PassportData data)
-    {
-        var options = new JsonSerializerOptions
-        {
-            WriteIndented = true,
-            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-        };
-
-        string json = JsonSerializer.Serialize(data, options);
-
-        var saveFileDialog = new SaveFileDialog
-        {
-            Filter = "JSON files (*.json)|*.json",
-            Title = "Сохранить данные паспорта",
-            FileName = $"{data.FullName?.Replace(" ", "_")}_passport.json"
-        };
-
-        if (saveFileDialog.ShowDialog() == DialogResult.OK)
-        {
-            File.WriteAllText(saveFileDialog.FileName, json, System.Text.Encoding.UTF8);
-            MessageBox.Show("Данные успешно сохранены!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 
