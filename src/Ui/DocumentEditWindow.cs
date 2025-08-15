@@ -1,14 +1,13 @@
-using System.Text.Json;
 using PassRegulaParser.Model;
 using PassRegulaParser.Services;
 
 namespace PassRegulaParser.Ui;
 
-public class DocumentEditForm : Form
+public class DocumentEditWindow : Form
 {
     private PassportData _documentData;
 
-    public DocumentEditForm(PassportData passportData)
+    public DocumentEditWindow(PassportData passportData)
     {
         _documentData = passportData;
         InitializeComponents();
