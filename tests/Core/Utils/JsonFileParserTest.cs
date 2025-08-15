@@ -53,7 +53,7 @@ namespace PassRegulaParser.Tests.Core.Utils
         public void Constructor_WithNonExistentFile_ThrowsParsingException()
         {
             var nonExistentPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-            Assert.Throws<ParsingException>(() => new JsonFileParser(nonExistentPath));
+            Assert.Throws<ParsingException>(() => new JsonFileParser(nonExistentPath, 1));
         }
 
         [Fact]
@@ -71,6 +71,41 @@ namespace PassRegulaParser.Tests.Core.Utils
                 File.Delete(invalidJsonPath);
             }
         }
+
+
+        [Fact]
+        public void Constructor_WithFileThatAppearsAfterRetry_Succeeds()
+        {
+            var delayedFilePath = Path.Combine(Path.GetTempPath(), $"delayed_{Guid.NewGuid()}.json");
+
+            try
+            {
+                Task.Run(async () =>
+                {
+                    await Task.Delay(200);
+                    File.WriteAllText(delayedFilePath, TestJson);
+                });
+
+                var exception = Record.Exception(() => new JsonFileParser(delayedFilePath));
+                Assert.Null(exception);
+            }
+            finally
+            {
+                if (File.Exists(delayedFilePath))
+                {
+                    File.Delete(delayedFilePath);
+                }
+            }
+        }
+
+        [Fact]
+        public void Constructor_WithFileThatNeverAppears_ThrowsParsingException()
+        {
+            var nonExistentPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+
+            var ex = Assert.Throws<ParsingException>(() => new JsonFileParser(nonExistentPath, 50));
+        }
+
 
         [Fact]
         public void GetStringProperty_WithValidPath_ReturnsCorrectValue()

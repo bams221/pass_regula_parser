@@ -7,43 +7,57 @@ namespace PassRegulaParser.Core.Utils;
 public class JsonFileParser : IDisposable
 {
     private readonly JsonNode _rootNode;
-    private readonly FileStream? _fileStream;
+    private FileStream? _fileStream;
+    private readonly int _retryDelayMilliseconds;
+    private const int MaxRetryAttempts = 3;
 
-    public JsonFileParser(string jsonFilepath)
+    public JsonFileParser(string jsonFilepath, int retryDelayMs = 2000)
     {
+        _retryDelayMilliseconds = retryDelayMs;
         CheckJsonFilePath(jsonFilepath);
-        try
-        {
-            _fileStream = File.OpenRead(jsonFilepath);
-            _rootNode = JsonNode.Parse(_fileStream) ??
-                        throw new ParsingException("JSON content is null");
-        }
-        catch (JsonException ex)
-        {
-            throw new ParsingException("Invalid JSON format", ex);
-        }
-        catch (Exception ex) when (ex is not ParsingException)
-        {
-            throw new ParsingException("Error parsing JSON file", ex);
-        }
-        finally
-        {
-            _fileStream?.Dispose();
-        }
+        _rootNode = TryReadFile(jsonFilepath);
     }
 
     public JsonNode RootNode => _rootNode;
+
+    private JsonNode TryReadFile(string filePath)
+    {
+        int attempt = 0;
+        while (true)
+        {
+            try
+            {
+                _fileStream = File.OpenRead(filePath);
+                return JsonNode.Parse(_fileStream) ??
+                       throw new ParsingException("JSON content is null");
+            }
+            catch (FileNotFoundException) when (attempt < MaxRetryAttempts - 1)
+            {
+                attempt++;
+                Console.WriteLine($"File {filePath} not found. Attempt: {attempt}. Retrying...");
+                Thread.Sleep(_retryDelayMilliseconds);
+                continue;
+            }
+            catch (JsonException ex)
+            {
+                throw new ParsingException("Invalid JSON format", ex);
+            }
+            catch (Exception ex) when (ex is not ParsingException)
+            {
+                throw new ParsingException("Error parsing JSON file", ex);
+            }
+            finally
+            {
+                _fileStream?.Dispose();
+            }
+        }
+    }
 
     private static void CheckJsonFilePath(string filepath)
     {
         if (string.IsNullOrWhiteSpace(filepath))
         {
             throw new ParsingException("File path cannot be null or empty");
-        }
-
-        if (!File.Exists(filepath))
-        {
-            throw new ParsingException($"File not found: {filepath}");
         }
     }
 
@@ -64,6 +78,7 @@ public class JsonFileParser : IDisposable
             throw new ParsingException($"Invalid operation while accessing property '{propertyPath}'", ex);
         }
     }
+
     public JsonNode? GetNodeByPath(string propertyPath)
     {
         JsonNode? currentNode = _rootNode;
