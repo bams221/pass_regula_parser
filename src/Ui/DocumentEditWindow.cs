@@ -5,7 +5,7 @@ namespace PassRegulaParser.Ui;
 
 public class DocumentEditWindow : Form
 {
-    private PassportData _documentData;
+    private readonly PassportData _documentData;
 
     public DocumentEditWindow(PassportData passportData)
     {
@@ -33,13 +33,13 @@ public class DocumentEditWindow : Form
         panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
         panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
 
-        AddLabel(panel, "Тип документа:", _documentData.DocumentType ?? "", 0);
-        AddField(panel, "ФИО:", _documentData.FullName ?? "", 1);
-        AddField(panel, "Серия/номер:", _documentData.SerialNumber ?? "", 2);
-        AddField(panel, "Город рождения:", _documentData.BirthCity ?? "", 3);
-        AddField(panel, "Дата рождения:", _documentData.BirthDate ?? "", 4);
-        AddField(panel, "Пол:", _documentData.Gender ?? "", 5);
-        AddField(panel, "Описание:", _documentData.Description ?? "", 6);
+        ControlHelper.AddLabel(panel, "Тип документа:", _documentData.DocumentType ?? "", 0);
+        ControlHelper.AddField(panel, "ФИО:", _documentData.FullName ?? "", 1);
+        ControlHelper.AddField(panel, "Серия/номер:", _documentData.SerialNumber ?? "", 2);
+        ControlHelper.AddField(panel, "Город рождения:", _documentData.BirthCity ?? "", 3);
+        ControlHelper.AddField(panel, "Дата рождения:", _documentData.BirthDate ?? "", 4);
+        ControlHelper.AddField(panel, "Пол:", _documentData.Gender ?? "", 5);
+        ControlHelper.AddField(panel, "Описание:", _documentData.Description ?? "", 6);
 
         var photoLabel = new Label
         {
@@ -59,11 +59,9 @@ public class DocumentEditWindow : Form
         {
             try
             {
-                var imageBytes = Convert.FromBase64String(_documentData.PhotoBase64);
-                using (var ms = new MemoryStream(imageBytes))
-                {
-                    photoBox.Image = Image.FromStream(ms);
-                }
+                byte[]? imageBytes = Convert.FromBase64String(_documentData.PhotoBase64);
+                using var ms = new MemoryStream(imageBytes);
+                photoBox.Image = Image.FromStream(ms);
             }
             catch
             {
@@ -98,11 +96,8 @@ public class DocumentEditWindow : Form
     private void SaveButton_Click()
     {
         UpdateDocumentDataFromTextBlocks();
-        
         DocumentDataSaver.SaveToJson(_documentData);
-
-        DialogResult = DialogResult.OK;
-        Close();
+        CloseWindow();
     }
 
     private void UpdateDocumentDataFromTextBlocks()
@@ -125,43 +120,9 @@ public class DocumentEditWindow : Form
         }
     }
 
-    private static void AddField(TableLayoutPanel panel, string labelText, string value, int row)
+    private void CloseWindow()
     {
-        var label = new Label
-        {
-            Text = labelText,
-            Dock = DockStyle.Fill,
-            TextAlign = ContentAlignment.MiddleLeft
-        };
-
-        var textBox = new TextBox
-        {
-            Text = value,
-            Dock = DockStyle.Fill,
-            Margin = new Padding(0, 5, 0, 5)
-        };
-
-        panel.Controls.Add(label, 0, row);
-        panel.Controls.Add(textBox, 1, row);
-    }
-
-    private static void AddLabel(TableLayoutPanel panel, string labelText, string value, int row)
-    {
-        var labelTitle = new Label
-        {
-            Text = labelText,
-            Dock = DockStyle.Fill,
-            TextAlign = ContentAlignment.MiddleLeft
-        };
-
-        var labelValue = new Label
-        {
-            Text = value,
-            Dock = DockStyle.Fill,
-            TextAlign = ContentAlignment.MiddleLeft
-        };
-
-        panel.Controls.Add(labelTitle, 0, row);
-        panel.Controls.Add(labelValue, 1, row);
+        DialogResult = DialogResult.OK;
+        Close();
     }
 }
