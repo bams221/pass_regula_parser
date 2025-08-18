@@ -79,13 +79,13 @@ public class JsonFileParser : IDisposable
         }
     }
 
-    public JsonNode? GetNodeByPath(string propertyPath)
+    public JsonNode GetNodeByPath(string propertyPath)
     {
-        JsonNode? currentNode = _rootNode;
+        JsonNode currentNode = _rootNode;
         foreach (var property in propertyPath.Split('.'))
         {
-            currentNode = currentNode?[property];
-            if (currentNode == null) return null;
+            currentNode = currentNode[property]
+                ?? throw new ParsingException($"Property is not found at path: {propertyPath}");
         }
         return currentNode;
     }

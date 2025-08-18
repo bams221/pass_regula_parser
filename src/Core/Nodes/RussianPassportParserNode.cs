@@ -1,4 +1,3 @@
-using System.Text.Json.Nodes;
 using PassRegulaParser.Core.Exceptions;
 using PassRegulaParser.Core.Interfaces;
 using PassRegulaParser.Core.Utils;
@@ -15,13 +14,19 @@ class RussianPassportParserNode(string doctypeDataJsonFilepath) : INodeElement
     {
         try
         {
-            JsonArray fieldList = (_jsonParser.GetNodeByPath(FieldListPath)?.AsArray()) ??
-                throw new ParsingException($"Field list not found at path: {FieldListPath}");
-            passportData.SerialNumber = GetValueFromJson(fieldList, "Document Number");
-            passportData.BirthDate = GetValueFromJson(fieldList, "Date of Birth");
-            passportData.FullName = GetValueFromJsonWithLang(fieldList, "Surname And Given Names");
-            passportData.Gender = GetValueFromJsonWithLang(fieldList, "Sex");
-            passportData.BirthCity = GetValueFromJsonWithLang(fieldList, "Place of Birth");
+            FieldList fieldList = new(
+                fieldArray: _jsonParser.GetNodeByPath(FieldListPath).AsArray(),
+                valuePropertyName: "value",
+                namePropertyName: "fieldName",
+                languagePropertyName: "lcidName",
+                language: "Russian"
+            );
+
+            passportData.SerialNumber = fieldList.GetValue("Document Number");
+            passportData.BirthDate = fieldList.GetValue("Date of Birth");
+            passportData.FullName = fieldList.GetValueRussian("Surname And Given Names");
+            passportData.Gender = fieldList.GetValueRussian("Sex");
+            passportData.BirthCity = fieldList.GetValueRussian("Place of Birth");
 
             return passportData;
         }
@@ -29,26 +34,5 @@ class RussianPassportParserNode(string doctypeDataJsonFilepath) : INodeElement
         {
             throw new ParsingException("Error processing Russian passport data", ex);
         }
-    }
-
-    private static string GetValueFromJson(JsonArray fieldList, string fieldName)
-    {
-        return JsonUtils.FindValueByFieldName(
-            fieldList: fieldList,
-            fieldName: fieldName,
-            valuePropertyName: "value",
-            namePropertyName: "fieldName"
-            );
-    }
-    private static string GetValueFromJsonWithLang(JsonArray fieldList, string fieldName)
-    {
-        return JsonUtils.FindValueByFieldName(
-            fieldList: fieldList,
-            fieldName: fieldName,
-            valuePropertyName: "value",
-            namePropertyName: "fieldName",
-            languagePropertyName: "lcidName",
-            language: "Russian"
-            );
     }
 }

@@ -1,11 +1,10 @@
-using PassRegulaParser.Core.Exceptions;
 using PassRegulaParser.Core.Interfaces;
 using PassRegulaParser.Core.Utils;
 using PassRegulaParser.Model;
 
 namespace PassRegulaParser.Core.Nodes;
 
-class RussianPassportSecondPageParserNode: INodeElement
+class RussianPassportSecondPageParserNode : INodeElement
 {
     private const string fieldListPath = "DocVisualExtendedInfo.pArrayFields";
     private const string visualDataFilename = "Visual_OCR_Data.json";
@@ -25,17 +24,19 @@ class RussianPassportSecondPageParserNode: INodeElement
             Console.WriteLine($"Folder {_secondPageFolderPath} does not exists. Skipping");
             return passportData;
         }
-        
-        string visualDataFilepath =  Path.Combine(_secondPageFolderPath, visualDataFilename);
+
+        string visualDataFilepath = Path.Combine(_secondPageFolderPath, visualDataFilename);
 
         JsonFileParser _jsonParser = new(visualDataFilepath);
+        FieldList fieldList = new(
+            fieldArray: _jsonParser.GetNodeByPath(fieldListPath).AsArray(),
+            valuePropertyName: "Buf_Text",
+            namePropertyName: "FieldName"
+            );
 
-        var fieldList = (_jsonParser.GetNodeByPath(fieldListPath)?.AsArray()) ??
-                throw new ParsingException($"Field list not found at path: {fieldListPath}");
-        
-        passportData.IssueDate = JsonUtils.FindValueByFieldName(fieldList, "Date of Issue", "Buf_Text", "FieldName");
-        passportData.Authority = JsonUtils.FindValueByFieldName(fieldList, "Authority", "Buf_Text", "FieldName");
-        passportData.AuthorityCode = JsonUtils.FindValueByFieldName(fieldList, "Authority Code", "Buf_Text", "FieldName");
+        passportData.IssueDate = fieldList.GetValue("Date of Issue");
+        passportData.Authority = fieldList.GetValue("Authority");
+        passportData.AuthorityCode = fieldList.GetValue("Authority Code");
 
         return passportData;
     }

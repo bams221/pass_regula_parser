@@ -157,8 +157,7 @@ namespace PassRegulaParser.Tests.Core.Utils
         public void GetNodeByPath_WithNonExistentPath_ReturnsNull()
         {
             var parser = new JsonFileParser(_tempFilePath);
-            var node = parser.GetNodeByPath("user.nonexistent.property");
-            Assert.Null(node);
+            Assert.Throws<ParsingException>(()=> parser.GetNodeByPath("user.nonexistent.property"));
         }
 
         [Fact]
