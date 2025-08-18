@@ -94,6 +94,17 @@ public class DocumentFormBuilder(DocumentEditWindow window)
             ? CreateMultilineTextBox(propertyValue)
             : CreateSingleLineTextBox(propertyValue);
 
+        UpdateControlBackground(inputControl, propertyValue);
+
+
+        if (inputControl is TextBox textBox)
+        {
+            textBox.TextChanged += (sender, e) =>
+            {
+                UpdateControlBackground(textBox, textBox.Text);
+            };
+        }
+
         _mainPanel.Controls.Add(label, 0, rowIndex);
         _mainPanel.Controls.Add(inputControl, 1, rowIndex);
         FieldControls.Add(propertyName, inputControl);
@@ -115,6 +126,18 @@ public class DocumentFormBuilder(DocumentEditWindow window)
         Height = 60,
         Margin = new Padding(0, 5, 0, 5)
     };
+
+    private void UpdateControlBackground(Control control, string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            control.BackColor = Color.LightPink;
+        }
+        else
+        {
+            control.BackColor = SystemColors.Window;
+        }
+    }
 
     private void AddPhotoField()
     {
