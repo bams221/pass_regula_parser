@@ -21,4 +21,19 @@ public static class JsonUtils
         }
         return string.Empty;
     }
+
+    public static string FindBufTextByFieldName(JsonArray fieldList, string fieldName)
+    {
+        foreach (var field in fieldList)
+        {
+            if (field == null) continue;
+
+            var fieldNode = field.AsObject();
+            if (fieldNode["FieldName"]?.GetValue<string>() != fieldName)
+                continue;
+
+            return fieldNode["Buf_Text"]?.GetValue<string>() ?? string.Empty;
+        }
+        return string.Empty;
+    }
 }
