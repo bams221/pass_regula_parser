@@ -33,9 +33,9 @@ class RussianPassportSecondPageParserNode: INodeElement
         var fieldList = (_jsonParser.GetNodeByPath(fieldListPath)?.AsArray()) ??
                 throw new ParsingException($"Field list not found at path: {fieldListPath}");
         
-        passportData.IssueDate = JsonUtils.FindBufTextByFieldName(fieldList, "Date of Issue");
-        passportData.Authority = JsonUtils.FindBufTextByFieldName(fieldList, "Authority");
-        passportData.AuthorityCode = JsonUtils.FindBufTextByFieldName(fieldList, "Authority Code");
+        passportData.IssueDate = JsonUtils.FindValueByFieldName(fieldList, "Date of Issue", "Buf_Text", "FieldName");
+        passportData.Authority = JsonUtils.FindValueByFieldName(fieldList, "Authority", "Buf_Text", "FieldName");
+        passportData.AuthorityCode = JsonUtils.FindValueByFieldName(fieldList, "Authority Code", "Buf_Text", "FieldName");
 
         return passportData;
     }
