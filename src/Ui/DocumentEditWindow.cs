@@ -22,8 +22,8 @@ public class DocumentEditWindow : Form
     private void InitializeWindowProperties()
     {
         Text = "Данные отсканированного документа";
-        Size = new Size(450, 650);
-        MinimumSize = new Size(400, 500);
+        Size = new Size(500, 800);
+        MinimumSize = new Size(400, 600);
         FormBorderStyle = FormBorderStyle.Sizable;
         MaximizeBox = true;
         StartPosition = FormStartPosition.CenterScreen;

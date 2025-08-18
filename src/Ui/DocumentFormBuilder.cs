@@ -38,8 +38,11 @@ public class DocumentFormBuilder(DocumentEditWindow window)
         AddEditableField("Город рождения:", nameof(PassportData.BirthCity));
         AddEditableField("Дата рождения:", nameof(PassportData.BirthDate));
         AddEditableField("Пол:", nameof(PassportData.Gender));
-        AddEditableField("Описание:", nameof(PassportData.Description), true);
+        AddEditableField("Дата выдачи:", nameof(PassportData.IssueDate));
+        AddEditableField("Орган выдачи:", nameof(PassportData.Authority), true);
+        AddEditableField("Код подразделения:", nameof(PassportData.AuthorityCode));
         AddPhotoField();
+        AddEditableField("Описание:", nameof(PassportData.Description), true);
     }
 
     private void AddReadOnlyField(string labelText, string propertyName)
