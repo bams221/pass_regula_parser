@@ -8,6 +8,7 @@ namespace PassRegulaParser.Core.Handlers;
 public class NewRecognitionHandler(string dirPath)
 {
     readonly string _dirPath = dirPath;
+    private DocumentEditWindow? _currentWindow;
 
     public void OnChangeDetected(object source, FileSystemEventArgs e)
     {
@@ -45,11 +46,18 @@ public class NewRecognitionHandler(string dirPath)
 
         Console.WriteLine("Recognized passport Data: " + passportData);
 
+        if (_currentWindow != null)
+        {
+            _currentWindow.Invoke(() => _currentWindow.Close());
+            _currentWindow.Dispose();
+        }
+
         Thread uiThread = new(() =>
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new DocumentEditWindow(passportData));
+            _currentWindow = new DocumentEditWindow(passportData);
+            Application.Run(_currentWindow);
         });
         uiThread.SetApartmentState(ApartmentState.STA);
         uiThread.Start();

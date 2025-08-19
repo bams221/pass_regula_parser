@@ -2,7 +2,7 @@ namespace PassRegulaParser.Core.Utils;
 
 public static class FolderChecker
 {
-    public static bool IsFolderExists(string folderPath, int checkDelayMs = 1000)
+    public static bool IsFolderExists(string folderPath, int checkDelayMs = 500)
     {
         int attempts = 3;
 
@@ -15,6 +15,7 @@ public static class FolderChecker
 
             if (i < attempts - 1)
             {
+                Console.WriteLine($"Folder {folderPath} not found. Attempt {i + 1}");
                 Thread.Sleep(checkDelayMs);
             }
         }
