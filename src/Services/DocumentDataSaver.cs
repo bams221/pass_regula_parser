@@ -5,15 +5,15 @@ namespace PassRegulaParser.Services;
 
 public static class DocumentDataSaver
 {
-    public static void SaveToJson(PassportData data)
-    {
-        var options = new JsonSerializerOptions
+    static readonly JsonSerializerOptions _options = new()
         {
             WriteIndented = true,
             Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
         };
 
-        string json = JsonSerializer.Serialize(data, options);
+    public static void SaveToJson(PassportData data)
+    {
+        string json = JsonSerializer.Serialize(data, _options);
 
         var saveFileDialog = new SaveFileDialog
         {
