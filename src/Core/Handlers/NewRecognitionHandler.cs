@@ -1,6 +1,6 @@
 using PassRegulaParser.Core.Exceptions;
 using PassRegulaParser.Core.Nodes;
-using PassRegulaParser.Model;
+using PassRegulaParser.Models;
 using PassRegulaParser.Ui;
 
 namespace PassRegulaParser.Core.Handlers;

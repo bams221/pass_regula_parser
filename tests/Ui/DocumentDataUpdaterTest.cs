@@ -1,4 +1,4 @@
-using PassRegulaParser.Model;
+using PassRegulaParser.Models;
 using System.Windows.Forms;
 using PassRegulaParser.Ui;
 

@@ -1,4 +1,4 @@
-namespace PassRegulaParser.Model;
+namespace PassRegulaParser.Models;
 
 public class PassportData
 {

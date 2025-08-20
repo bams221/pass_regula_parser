@@ -1,7 +1,7 @@
 using PassRegulaParser.Core.Exceptions;
 using PassRegulaParser.Core.Interfaces;
 using PassRegulaParser.Core.Utils;
-using PassRegulaParser.Model;
+using PassRegulaParser.Models;
 
 namespace PassRegulaParser.Core.Nodes;
 

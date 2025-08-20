@@ -10,8 +10,8 @@ class ServiceRunner
 
     public static void Main(string[] args)
     {
-        var newRecognitionHandler = new NewRecognitionHandler(PathToWatch);
-        var watcher = new DirWatcher(
+        NewRecognitionHandler newRecognitionHandler = new(PathToWatch);
+        DirWatcher watcher = new(
             PathToWatch,
             FileFilter,
             newRecognitionHandler.OnChangeDetected);

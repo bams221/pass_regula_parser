@@ -1,5 +1,5 @@
 using System.Text.Json;
-using PassRegulaParser.Model;
+using PassRegulaParser.Models;
 
 namespace PassRegulaParser.Services;
 
