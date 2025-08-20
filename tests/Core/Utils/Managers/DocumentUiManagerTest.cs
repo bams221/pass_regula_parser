@@ -29,7 +29,7 @@ namespace PassRegulaParser.Tests.Core.Utils.Managers
             _manager.ShowDocumentEditWindow(_mockPassportData.Object);
             Thread.Sleep(100);
             
-            _manager.CloseCurrentWindow();
+            _manager.ClosePrevWindow();
             Thread.Sleep(100);
 
             Assert.False(_manager.IsWindowOpen);
@@ -38,7 +38,7 @@ namespace PassRegulaParser.Tests.Core.Utils.Managers
         [Fact]
         public void CloseCurrentWindow_WhenNoWindowIsOpen_ShouldNotThrowException()
         {
-            var exception = Record.Exception(() => _manager.CloseCurrentWindow());
+            var exception = Record.Exception(() => _manager.ClosePrevWindow());
             Assert.Null(exception);
         }
 
@@ -77,7 +77,7 @@ namespace PassRegulaParser.Tests.Core.Utils.Managers
             _manager.ShowDocumentEditWindow(_mockPassportData.Object);
             Thread.Sleep(100);
 
-            _manager.CloseCurrentWindow();
+            _manager.ClosePrevWindow();
             Thread.Sleep(100);
 
             Assert.False(_manager.IsWindowOpen);
