@@ -61,7 +61,7 @@ public class JsonFileParser : IDisposable
         }
     }
 
-    public string GetStringProperty(string propertyPath)
+    public string GetPropertyString(string propertyPath)
     {
         try
         {
@@ -69,17 +69,26 @@ public class JsonFileParser : IDisposable
             return node?.GetValue<string>() ??
                    throw new ParsingException($"Property '{propertyPath}' is null");
         }
-        catch (KeyNotFoundException)
-        {
-            throw new ParsingException($"Property path '{propertyPath}' not found in JSON");
-        }
         catch (InvalidOperationException ex)
         {
             throw new ParsingException($"Invalid operation while accessing property '{propertyPath}'", ex);
         }
     }
 
-    public JsonNode GetNodeByPath(string propertyPath)
+    public JsonArray GetPropertyArray(string propertyPath)
+    {
+        try
+        {
+            return GetNodeByPath(propertyPath).AsArray();
+
+        }
+        catch (InvalidOperationException ex)
+        {
+            throw new ParsingException("Invalid operation: " + ex.Message);
+        }
+    }
+
+    private JsonNode GetNodeByPath(string propertyPath)
     {
         JsonNode currentNode = _rootNode;
         foreach (var property in propertyPath.Split('.'))

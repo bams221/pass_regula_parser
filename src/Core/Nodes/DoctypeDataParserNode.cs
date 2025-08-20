@@ -15,7 +15,7 @@ class DoctypeDataParserNode : INodeElement
 
     public PassportData Process(PassportData passportData)
     {
-        string documentName = _jsonParser.GetStringProperty("OneCandidate.DocumentName");
+        string documentName = _jsonParser.GetPropertyString("OneCandidate.DocumentName");
         passportData.DocumentType = documentName;
         return passportData;
     }

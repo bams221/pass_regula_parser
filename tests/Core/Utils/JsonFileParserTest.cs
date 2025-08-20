@@ -111,7 +111,7 @@ public class JsonFileParserTests : IDisposable
     public void GetStringProperty_WithValidPath_ReturnsCorrectValue()
     {
         var parser = new JsonFileParser(_tempFilePath);
-        var result = parser.GetStringProperty("user.name");
+        var result = parser.GetPropertyString("user.name");
         Assert.Equal("John Doe", result);
     }
 
@@ -119,7 +119,7 @@ public class JsonFileParserTests : IDisposable
     public void GetStringProperty_WithNestedPath_ReturnsCorrectValue()
     {
         var parser = new JsonFileParser(_tempFilePath);
-        var result = parser.GetStringProperty("user.address.street");
+        var result = parser.GetPropertyString("user.address.street");
         Assert.Equal("123 Main St", result);
     }
 
@@ -127,38 +127,78 @@ public class JsonFileParserTests : IDisposable
     public void GetStringProperty_WithNonExistentPath_ThrowsParsingException()
     {
         var parser = new JsonFileParser(_tempFilePath);
-        Assert.Throws<ParsingException>(() => parser.GetStringProperty("user.nonexistent.property"));
+        Assert.Throws<ParsingException>(() => parser.GetPropertyString("user.nonexistent.property"));
     }
 
     [Fact]
     public void GetStringProperty_WithNullValue_ThrowsParsingException()
     {
         var parser = new JsonFileParser(_tempFilePath);
-        Assert.Throws<ParsingException>(() => parser.GetStringProperty("emptyValue"));
+        Assert.Throws<ParsingException>(() => parser.GetPropertyString("emptyValue"));
     }
 
     [Fact]
     public void GetStringProperty_WithNonStringValue_ThrowsParsingException()
     {
         var parser = new JsonFileParser(_tempFilePath);
-        Assert.Throws<ParsingException>(() => parser.GetStringProperty("user.age"));
+        Assert.Throws<ParsingException>(() => parser.GetPropertyString("user.age"));
+    }
+    [Fact]
+    public void GetPropertyArray_WithValidPath_ReturnsCorrectArray()
+    {
+        var parser = new JsonFileParser(_tempFilePath);
+        var result = parser.GetPropertyArray("user.tags");
+        Assert.NotNull(result);
+        Assert.Equal(2, result.Count);
+        Assert.Equal("tag1", result[0]!.GetValue<string>());
+        Assert.Equal("tag2", result[1]!.GetValue<string>());
     }
 
     [Fact]
-    public void GetNodeByPath_WithValidPath_ReturnsCorrectNode()
+    public void GetPropertyArray_WithNonExistentPath_ThrowsParsingException()
     {
         var parser = new JsonFileParser(_tempFilePath);
-        var node = parser.GetNodeByPath("user.address");
-        Assert.NotNull(node);
-        Assert.Equal("123 Main St", node["street"]?.GetValue<string>());
+        Assert.Throws<ParsingException>(() => parser.GetPropertyArray("user.nonexistent.array"));
     }
 
     [Fact]
-    public void GetNodeByPath_WithNonExistentPath_ReturnsNull()
+    public void GetPropertyArray_WithNonArrayValue_ThrowsParsingException()
     {
         var parser = new JsonFileParser(_tempFilePath);
-        Assert.Throws<ParsingException>(() => parser.GetNodeByPath("user.nonexistent.property"));
+        Assert.Throws<ParsingException>(() => parser.GetPropertyArray("user.name"));
     }
+
+    [Fact]
+    public void Constructor_WithEmptyJsonFile_ThrowsParsingException()
+    {
+        var emptyJsonPath = Path.GetTempFileName();
+        File.WriteAllText(emptyJsonPath, "{}");
+
+        try
+        {
+            var parser = new JsonFileParser(emptyJsonPath);
+            Assert.Throws<ParsingException>(() => parser.GetPropertyString("nonexistent"));
+        }
+        finally
+        {
+            File.Delete(emptyJsonPath);
+        }
+    }
+
+    [Fact]
+    public void GetPropertyString_WithEmptyPath_ThrowsParsingException()
+    {
+        var parser = new JsonFileParser(_tempFilePath);
+        Assert.Throws<ParsingException>(() => parser.GetPropertyString(""));
+    }
+
+    [Fact]
+    public void GetPropertyArray_WithEmptyPath_ThrowsParsingException()
+    {
+        var parser = new JsonFileParser(_tempFilePath);
+        Assert.Throws<ParsingException>(() => parser.GetPropertyArray(""));
+    }
+
 
     [Fact]
     public void Dispose_CanBeCalledMultipleTimes()
