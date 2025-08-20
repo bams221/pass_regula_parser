@@ -30,13 +30,11 @@ public class DocumentRecognitionCoordinator(string dirPath)
         {
             DoctypeDataParserNode doctypeDataParserNode = new(doctypeDataFilepath);
             RussianPassportParserNode rusPasspParserNode = new(textDataFilepath);
-            RussianPassportSecondPageParserNode rusPasspSecondPageParserNode = new(secondPageFolderPath);
             PhotoImageNode photoImageNode = new(photoFilepath);
 
             passportData = doctypeDataParserNode.Process(passportData);
             passportData = rusPasspParserNode.Process(passportData);
             passportData = photoImageNode.Process(passportData);
-            passportData = rusPasspSecondPageParserNode.Process(passportData);
         }
         catch (ParsingException ex)
         {
