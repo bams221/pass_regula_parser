@@ -27,6 +27,7 @@ public class DocumentEditWindow : Form
         FormBorderStyle = FormBorderStyle.Sizable;
         MaximizeBox = true;
         StartPosition = FormStartPosition.CenterScreen;
+        TopMost = true;
     }
 
     public void SaveAndClose()
