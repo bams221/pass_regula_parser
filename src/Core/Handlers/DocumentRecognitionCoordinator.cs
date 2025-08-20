@@ -19,30 +19,36 @@ public class DocumentRecognitionCoordinator(string dirPath)
 
     private void ProcessRecognition()
     {
-        string doctypeDataFilepath = Path.Combine(_dirPath, "ChoosenDoctype_Data.json");
-        string textDataFilepath = Path.Combine(_dirPath, "Text_Data.json");
-        string photoFilepath = Path.Combine(_dirPath, "Photo.jpg");
-
-        PassportData passportData = new();
-
         try
         {
-            DoctypeDataParserNode doctypeDataParserNode = new(doctypeDataFilepath);
-            RussianPassportParserNode rusPasspParserNode = new(textDataFilepath);
-            PhotoImageNode photoImageNode = new(photoFilepath);
+            PassportData passportData = CollectPassportData();
 
-            passportData = doctypeDataParserNode.Process(passportData);
-            passportData = rusPasspParserNode.Process(passportData);
-            passportData = photoImageNode.Process(passportData);
+            _uiManager.ShowDocumentEditWindow(passportData);
         }
         catch (ParsingException ex)
         {
             Console.WriteLine("Parsign error: " + ex.Message);
-            return;
         }
+    }
 
-        Console.WriteLine("Recognized passport Data: " + passportData);
+    private PassportData CollectPassportData()
+    {
+        PassportData passportData = new();
 
-        _uiManager.ShowDocumentEditWindow(passportData);
+        string doctypeDataFilepath = Path.Combine(_dirPath, "ChoosenDoctype_Data.json");
+        DoctypeDataParserNode doctypeDataParserNode = new(doctypeDataFilepath);
+        
+        string textDataFilepath = Path.Combine(_dirPath, "Text_Data.json");
+        RussianPassportParserNode rusPasspParserNode = new(textDataFilepath);
+
+        string photoFilepath = Path.Combine(_dirPath, "Photo.jpg");
+        PhotoImageNode photoImageNode = new(photoFilepath);
+
+        passportData = doctypeDataParserNode.Process(passportData);
+        passportData = rusPasspParserNode.Process(passportData);
+        passportData = photoImageNode.Process(passportData);
+
+        Console.WriteLine("Passport data recognized!");
+        return passportData;
     }
 }
