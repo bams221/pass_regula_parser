@@ -25,12 +25,11 @@ public class DocumentUiManager
 
     public void CloseCurrentWindow()
     {
-        if (_currentWindow != null)
-        {
-            _currentWindow.Invoke(() => _currentWindow.Close());
-            _currentWindow.Dispose();
-            _currentWindow = null;
-        }
+        if (_currentWindow == null) return;
+        
+        _currentWindow.Invoke(() => _currentWindow.Close());
+        _currentWindow.Dispose();
+        _currentWindow = null;
     }
 
     public bool IsWindowOpen => _currentWindow != null && !_currentWindow.IsDisposed;
