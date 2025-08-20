@@ -1,5 +1,5 @@
 using PassRegulaParser.Models;
-using PassRegulaParser.Services;
+using PassRegulaParser.Ui.Utils;
 
 namespace PassRegulaParser.Ui;
 

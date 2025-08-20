@@ -1,7 +1,7 @@
 using System.Text.Json;
 using PassRegulaParser.Models;
 
-namespace PassRegulaParser.Services;
+namespace PassRegulaParser.Ui.Utils;
 
 public static class DocumentDataSaver
 {

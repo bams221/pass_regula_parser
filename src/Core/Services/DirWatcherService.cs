@@ -1,10 +1,10 @@
-namespace PassRegulaParser.Core.DirWatcher;
+namespace PassRegulaParser.Core.Services;
 
-public class DirWatcher
+public class DirWatcherService
 {
     public FileSystemWatcher Watcher;
 
-    public DirWatcher(string path, string changeFilter, FileSystemEventHandler onChangeHandler)
+    public DirWatcherService(string path, string changeFilter, FileSystemEventHandler onChangeHandler)
     {
         Watcher = new FileSystemWatcher
         {

@@ -1,4 +1,4 @@
-﻿using PassRegulaParser.Core.DirWatcher;
+﻿using PassRegulaParser.Core.Services;
 using PassRegulaParser.Core.Handlers;
 
 namespace PassRegulaParser;
@@ -11,7 +11,7 @@ class ServiceRunner
     public static void Main(string[] args)
     {
         NewRecognitionHandler newRecognitionHandler = new(PathToWatch);
-        DirWatcher watcher = new(
+        DirWatcherService watcher = new(
             PathToWatch,
             FileFilter,
             newRecognitionHandler.OnChangeDetected);
