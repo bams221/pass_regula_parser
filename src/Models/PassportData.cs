@@ -1,8 +1,7 @@
 namespace PassRegulaParser.Models;
 
-public class PassportData
+public class PassportData : DocumentData
 {
-    public string? DocumentType { get; set; }
     public string? FullName { get; set; }
     public string? SerialNumber { get; set; }
     public string? BirthCity { get; set; }
@@ -12,7 +11,6 @@ public class PassportData
     public string? Authority { get; set; }
     public string? AuthorityCode { get; set; }
     public string? PhotoBase64 { get; set; }
-    public string? Description { get; set; }
 
     public override string ToString() =>
     $@"Passport Data:

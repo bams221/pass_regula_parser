@@ -22,7 +22,6 @@ public class DocumentRecognitionCoordinator(string dirPath)
         string doctypeDataFilepath = Path.Combine(_dirPath, "ChoosenDoctype_Data.json");
         string textDataFilepath = Path.Combine(_dirPath, "Text_Data.json");
         string photoFilepath = Path.Combine(_dirPath, "Photo.jpg");
-        string secondPageFolderPath = Path.Combine(_dirPath, "Page1");
 
         PassportData passportData = new();
 
