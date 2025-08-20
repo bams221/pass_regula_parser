@@ -10,7 +10,7 @@ class ServiceRunner
 
     public static void Main(string[] args)
     {
-        NewRecognitionHandler newRecognitionHandler = new(PathToWatch);
+        DocumentRecognitionCoordinator newRecognitionHandler = new(PathToWatch);
         DirWatcherService watcher = new(
             PathToWatch,
             FileFilter,

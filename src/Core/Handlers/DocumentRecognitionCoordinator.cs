@@ -5,7 +5,7 @@ using PassRegulaParser.Ui;
 
 namespace PassRegulaParser.Core.Handlers;
 
-public class NewRecognitionHandler(string dirPath)
+public class DocumentRecognitionCoordinator(string dirPath)
 {
     readonly string _dirPath = dirPath;
     private DocumentEditWindow? _currentWindow;
@@ -14,10 +14,10 @@ public class NewRecognitionHandler(string dirPath)
     {
         Console.WriteLine($"Changes detected in: {e.FullPath} ({e.ChangeType})");
         Thread.Sleep(1000);
-        ProcessNewRecognition();
+        ProcessRecognition();
     }
 
-    private void ProcessNewRecognition()
+    private void ProcessRecognition()
     {
         string doctypeDataFilepath = Path.Combine(_dirPath, "ChoosenDoctype_Data.json");
         string textDataFilepath = Path.Combine(_dirPath, "Text_Data.json");
