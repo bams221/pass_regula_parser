@@ -1,14 +1,14 @@
 using PassRegulaParser.Core.Exceptions;
+using PassRegulaParser.Core.Managers;
 using PassRegulaParser.Core.Nodes;
 using PassRegulaParser.Models;
-using PassRegulaParser.Ui;
 
 namespace PassRegulaParser.Core.Handlers;
 
 public class DocumentRecognitionCoordinator(string dirPath)
 {
     readonly string _dirPath = dirPath;
-    private DocumentEditWindow? _currentWindow;
+    private readonly DocumentUiManager _uiManager = new();
 
     public void OnChangeDetected(object source, FileSystemEventArgs e)
     {
@@ -46,20 +46,6 @@ public class DocumentRecognitionCoordinator(string dirPath)
 
         Console.WriteLine("Recognized passport Data: " + passportData);
 
-        if (_currentWindow != null)
-        {
-            _currentWindow.Invoke(() => _currentWindow.Close());
-            _currentWindow.Dispose();
-        }
-
-        Thread uiThread = new(() =>
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            _currentWindow = new DocumentEditWindow(passportData);
-            Application.Run(_currentWindow);
-        });
-        uiThread.SetApartmentState(ApartmentState.STA);
-        uiThread.Start();
+        _uiManager.ShowDocumentEditWindow(passportData);
     }
 }
