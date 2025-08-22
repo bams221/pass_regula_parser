@@ -1,0 +1,37 @@
+{
+  "result_type": 9,
+  "light": 0,
+  "buf_length": 60,
+  "list_idx": 0,
+  "page_idx": 0,
+  "OneCandidate": {
+    "DocumentName": "Russian Federation - Passport (2018)",
+    "ID": 709706995,
+    "P": 0.9380690455436707,
+    "Rotated180": 0,
+    "RotationAngle": 0,
+    "NecessaryLights": 8388608,
+    "RFID_Presence": 0,
+    "CheckAuthenticity": 2635301,
+    "UVExp": 6,
+    "OVIExp": 5,
+    "AuthenticityNecessaryLights": 8391832,
+    "FDSIDList": {
+      "dType": 222,
+      "dFormat": 2,
+      "dMRZ": true,
+      "isDeprecated": false,
+      "dDescription": "Domestic passport",
+      "dYear": "2018",
+      "dCountryName": "Russian Federation",
+      "ICAOCode": "RUS",
+      "Count": 1,
+      "List": [22148]
+    }
+  },
+  "Info": {
+    "SDKVersion": "8.2.0.7502",
+    "FileVersion": "8.2",
+    "DeviceType": "7027 (OV 5Mp)"
+  }
+}

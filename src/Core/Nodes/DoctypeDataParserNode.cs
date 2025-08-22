@@ -4,14 +4,9 @@ using PassRegulaParser.Models;
 
 namespace PassRegulaParser.Core.Nodes;
 
-class DoctypeDataParserNode : INodeElement
+public class DoctypeDataParserNode(string doctypeDataJsonFilepath) : INodeElement
 {
-    private readonly JsonFileParser _jsonParser;
-
-    public DoctypeDataParserNode(string doctypeDataJsonFilepath)
-    {
-        _jsonParser = new JsonFileParser(doctypeDataJsonFilepath);
-    }
+    private readonly JsonFileParser _jsonParser = new(doctypeDataJsonFilepath);
 
     public PassportData Process(PassportData passportData)
     {
