@@ -4,7 +4,7 @@ using PassRegulaParser.Models;
 
 namespace PassRegulaParser.Core.Nodes;
 
-class RussianPassportParserNode(string doctypeDataJsonFilepath) : INodeElement
+public class RussianPassportParserNode(string doctypeDataJsonFilepath) : INodeElement
 {
     private const string FieldListPath = "Text.fieldList";
     private readonly JsonFileParser _jsonParser = new(doctypeDataJsonFilepath);

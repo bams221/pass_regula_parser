@@ -1,0 +1,1397 @@
+{
+  "result_type": 36,
+  "light": 0,
+  "buf_length": 44,
+  "list_idx": 0,
+  "page_idx": 0,
+  "Text": {
+    "status": 0,
+    "validityStatus": 0,
+    "comparisonStatus": 0,
+    "dateFormat": "dd.MM.yyyy",
+    "fieldList": [
+      {
+        "fieldType": 25,
+        "fieldName": "Surname And Given Names",
+        "lcid": 1049,
+        "lcidName": "Russian",
+        "status": 0,
+        "value": "ИВАНОВ ИВАН ИВАНОВИЧ",
+        "valueList": [
+          {
+            "value": "ИВАНОВ ИВАН ИВАНОВИЧ",
+            "originalValue": "ИВАНОВ  ИВАН ИВАНОВИЧ",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0
+          },
+          {
+            "value": "ИВАНОВ ИВАН ИВАНОВИЧ",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "probability": 0
+          }
+        ]
+      },
+      {
+        "fieldType": 56,
+        "fieldName": "Document Series",
+        "lcid": 0,
+        "status": 0,
+        "value": "2043",
+        "valueList": [
+          {
+            "value": "2043",
+            "originalValue": "2043",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "probability": 100
+          },
+          {
+            "value": "4028",
+            "originalValue": "4028",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 1,
+            "probability": 94
+          }
+        ],
+        "validityStatus": 0,
+        "validityList": [{ "source": "VISUAL", "status": 0 }],
+        "comparisonStatus": 2,
+        "comparisonList": []
+      },
+      {
+        "fieldType": 2,
+        "fieldName": "Document Number",
+        "lcid": 0,
+        "status": 0,
+        "value": "2043467632",
+        "valueList": [
+          {
+            "value": "2043467632",
+            "originalValue": "2043467632",
+            "originalValidity": 1,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "probability": 94
+          },
+          {
+            "value": "2043467632",
+            "originalValue": "20 23 467632",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "probability": 90
+          },
+          {
+            "value": "4028467632",
+            "originalValue": "20 28 467632",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 1,
+            "probability": 90
+          }
+        ],
+        "validityStatus": 0,
+        "validityList": [
+          { "source": "MRZ", "status": 1 },
+          { "source": "VISUAL", "status": 0 }
+        ],
+        "comparisonStatus": 1,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 1 }
+        ]
+      },
+      {
+        "fieldType": 9,
+        "fieldName": "Given Names",
+        "lcid": 1049,
+        "lcidName": "Russian",
+        "status": 0,
+        "value": "ИВАН",
+        "valueList": [
+          {
+            "value": "ИВАН",
+            "originalValue": "ИВАН",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1345,
+              "left": 786,
+              "right": 1011,
+              "top": 1292
+            },
+            "probability": 88
+          },
+          {
+            "value": "ИВАН",
+            "originalValue": "ИВАН",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 638,
+              "left": 837,
+              "right": 2059,
+              "top": 432
+            },
+            "probability": 95
+          }
+        ],
+        "validityStatus": 2,
+        "validityList": [],
+        "comparisonStatus": 0,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 0 }
+        ]
+      },
+      {
+        "fieldType": 0,
+        "fieldName": "Document Class Code",
+        "lcid": 0,
+        "status": 1,
+        "value": "PN",
+        "valueList": [
+          {
+            "value": "PN",
+            "originalValue": "PN",
+            "originalValidity": 1,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1349,
+              "left": 112,
+              "right": 193,
+              "top": 1303
+            },
+            "probability": 89
+          }
+        ],
+        "validityStatus": 1,
+        "validityList": [{ "source": "MRZ", "status": 1 }],
+        "comparisonStatus": 2,
+        "comparisonList": []
+      },
+      {
+        "fieldType": 1,
+        "fieldName": "Issuing State Code",
+        "lcid": 0,
+        "status": 1,
+        "value": "RUS",
+        "valueList": [
+          {
+            "value": "RUS",
+            "originalValue": "RUS",
+            "originalValidity": 1,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1349,
+              "left": 208,
+              "right": 337,
+              "top": 1303
+            },
+            "probability": 91
+          },
+          {
+            "value": "RUS",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "probability": 0
+          }
+        ],
+        "validityStatus": 1,
+        "validityList": [{ "source": "MRZ", "status": 1 }],
+        "comparisonStatus": 1,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 1 }
+        ]
+      },
+      {
+        "fieldType": 25,
+        "fieldName": "Surname And Given Names",
+        "lcid": 0,
+        "status": 1,
+        "value": "IVANOV IVAN IVANOVICH",
+        "valueList": [
+          {
+            "value": "IVANOV IVAN IVANOVICH",
+            "originalValue": "IVANOV  IV2N IVANOVI3",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1349,
+              "left": 353,
+              "right": 1634,
+              "top": 1288
+            },
+            "probability": 88
+          },
+          {
+            "value": "IVANOV IVAN IVANOVICH",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "probability": 88
+          }
+        ],
+        "validityStatus": 2,
+        "validityList": [],
+        "comparisonStatus": 1,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 1 }
+        ]
+      },
+      {
+        "fieldType": 8,
+        "fieldName": "Surname",
+        "lcid": 0,
+        "status": 1,
+        "value": "IVANOV",
+        "valueList": [
+          {
+            "value": "IVANOV",
+            "originalValue": "IVANOV",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1349,
+              "left": 353,
+              "right": 674,
+              "top": 1299
+            },
+            "probability": 92
+          },
+          {
+            "value": "IVANOV",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "probability": 92
+          }
+        ],
+        "validityStatus": 2,
+        "validityList": [],
+        "comparisonStatus": 1,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 1 }
+        ]
+      },
+      {
+        "fieldType": 8,
+        "fieldName": "Surname",
+        "lcid": 1049,
+        "lcidName": "Russian",
+        "status": 1,
+        "value": "ИВАНОВ",
+        "valueList": [
+          {
+            "value": "ИВАНОВ",
+            "originalValue": "ИВАНОВ",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1349,
+              "left": 353,
+              "right": 674,
+              "top": 1299
+            },
+            "probability": 92
+          },
+          {
+            "value": "ИВАНОВ",
+            "originalValue": "ИВАНОВ",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 444,
+              "left": 921,
+              "right": 2056,
+              "top": 143
+            },
+            "probability": 96
+          }
+        ],
+        "validityStatus": 2,
+        "validityList": [],
+        "comparisonStatus": 1,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 1 }
+        ]
+      },
+      {
+        "fieldType": 9,
+        "fieldName": "Given Names",
+        "lcid": 0,
+        "status": 1,
+        "value": "IVAN",
+        "valueList": [
+          {
+            "value": "IVAN",
+            "originalValue": "IV2N",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1345,
+              "left": 786,
+              "right": 1011,
+              "top": 1292
+            },
+            "probability": 88
+          },
+          {
+            "value": "IVAN",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "probability": 88
+          }
+        ],
+        "validityStatus": 2,
+        "validityList": [],
+        "comparisonStatus": 1,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 1 }
+        ]
+      },
+      {
+        "fieldType": 129,
+        "fieldName": "Fathers Name",
+        "lcid": 0,
+        "status": 1,
+        "value": "IVANOVICH",
+        "valueList": [
+          {
+            "value": "IVANOVICH",
+            "originalValue": "IVANOVI3",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1343,
+              "left": 1073,
+              "right": 1634,
+              "top": 1288
+            },
+            "probability": 88
+          },
+          {
+            "value": "IVANOVICH",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "probability": 88
+          }
+        ],
+        "validityStatus": 2,
+        "validityList": [],
+        "comparisonStatus": 1,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 1 }
+        ]
+      },
+      {
+        "fieldType": 129,
+        "fieldName": "Fathers Name",
+        "lcid": 1049,
+        "lcidName": "Russian",
+        "status": 1,
+        "value": "ИВАНОВИЧ",
+        "valueList": [
+          {
+            "value": "ИВАНОВИЧ",
+            "originalValue": "ИВАНОВИЧ",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1343,
+              "left": 1073,
+              "right": 1634,
+              "top": 1288
+            },
+            "probability": 88
+          },
+          {
+            "value": "ИВАНОВИЧ",
+            "originalValue": "ИВАНОВИЧ",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 728,
+              "left": 920,
+              "right": 2050,
+              "top": 537
+            },
+            "probability": 97
+          }
+        ],
+        "validityStatus": 2,
+        "validityList": [],
+        "comparisonStatus": 1,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 1 }
+        ]
+      },
+      {
+        "fieldType": 26,
+        "fieldName": "Nationality Code",
+        "lcid": 0,
+        "status": 1,
+        "value": "RUS",
+        "valueList": [
+          {
+            "value": "RUS",
+            "originalValue": "RUS",
+            "originalValidity": 1,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1485,
+              "left": 596,
+              "right": 723,
+              "top": 1437
+            },
+            "probability": 90
+          }
+        ],
+        "validityStatus": 1,
+        "validityList": [{ "source": "MRZ", "status": 1 }],
+        "comparisonStatus": 2,
+        "comparisonList": []
+      },
+      {
+        "fieldType": 12,
+        "fieldName": "Sex",
+        "lcid": 0,
+        "status": 1,
+        "value": "M",
+        "valueList": [
+          {
+            "value": "M",
+            "originalValue": "M",
+            "originalValidity": 1,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1481,
+              "left": 1079,
+              "right": 1110,
+              "top": 1435
+            },
+            "probability": 89
+          },
+          {
+            "value": "M",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "probability": 99
+          }
+        ],
+        "validityStatus": 1,
+        "validityList": [{ "source": "MRZ", "status": 1 }],
+        "comparisonStatus": 1,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 1 }
+        ]
+      },
+      {
+        "fieldType": 5,
+        "fieldName": "Date of Birth",
+        "lcid": 0,
+        "status": 1,
+        "value": "04.06.1993",
+        "valueList": [
+          {
+            "value": "04.06.1993",
+            "originalValue": "030406",
+            "originalValidity": 1,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1485,
+              "left": 736,
+              "right": 1016,
+              "top": 1430
+            },
+            "probability": 91
+          },
+          {
+            "value": "04.06.1993",
+            "originalValue": "04.06.1993",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 833,
+              "left": 1241,
+              "right": 2053,
+              "top": 625
+            },
+            "probability": 97
+          }
+        ],
+        "validityStatus": 1,
+        "validityList": [{ "source": "MRZ", "status": 1 }],
+        "comparisonStatus": 1,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 1 }
+        ]
+      },
+      {
+        "fieldType": 81,
+        "fieldName": "Date of Birth Checkdigit",
+        "lcid": 0,
+        "status": 1,
+        "value": "3",
+        "valueList": [
+          {
+            "value": "3",
+            "originalValue": "3",
+            "originalValidity": 1,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1481,
+              "left": 1029,
+              "right": 1062,
+              "top": 1430
+            },
+            "probability": 93
+          }
+        ],
+        "validityStatus": 1,
+        "validityList": [{ "source": "MRZ", "status": 1 }],
+        "comparisonStatus": 2,
+        "comparisonList": []
+      },
+      {
+        "fieldType": 3,
+        "fieldName": "Date of Expiry",
+        "lcid": 0,
+        "status": 1,
+        "value": "04.06.2048",
+        "valueList": [
+          {
+            "value": "04.06.2048",
+            "originalValue": "<<<<<<",
+            "originalValidity": 1,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1476,
+              "left": 1126,
+              "right": 1399,
+              "top": 1435
+            },
+            "probability": 99
+          },
+          {
+            "value": "04.06.2048",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "probability": 0
+          }
+        ],
+        "validityStatus": 1,
+        "validityList": [
+          { "source": "MRZ", "status": 1 },
+          { "source": "VISUAL", "status": 1 }
+        ],
+        "comparisonStatus": 1,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 1 }
+        ]
+      },
+      {
+        "fieldType": 80,
+        "fieldName": "Document Number Checkdigit",
+        "lcid": 0,
+        "status": 1,
+        "value": "5",
+        "valueList": [
+          {
+            "value": "5",
+            "originalValue": "5",
+            "originalValidity": 1,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1487,
+              "left": 549,
+              "right": 578,
+              "top": 1434
+            },
+            "probability": 93
+          }
+        ],
+        "validityStatus": 1,
+        "validityList": [{ "source": "MRZ", "status": 1 }],
+        "comparisonStatus": 2,
+        "comparisonList": []
+      },
+      {
+        "fieldType": 36,
+        "fieldName": "Optional Data",
+        "lcid": 0,
+        "status": 1,
+        "value": "3230427660123",
+        "valueList": [
+          {
+            "value": "3230427660123",
+            "originalValue": "3230427660123",
+            "originalValidity": 1,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1480,
+              "left": 1461,
+              "right": 2071,
+              "top": 1424
+            },
+            "probability": 93
+          }
+        ],
+        "validityStatus": 1,
+        "validityList": [{ "source": "MRZ", "status": 1 }],
+        "comparisonStatus": 2,
+        "comparisonList": []
+      },
+      {
+        "fieldType": 195,
+        "fieldName": "Optional Data CheckDigit",
+        "lcid": 0,
+        "status": 1,
+        "value": "7",
+        "valueList": [
+          {
+            "value": "7",
+            "originalValue": "7",
+            "originalValidity": 1,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1474,
+              "left": 2135,
+              "right": 2170,
+              "top": 1423
+            },
+            "probability": 99
+          }
+        ],
+        "validityStatus": 1,
+        "validityList": [{ "source": "MRZ", "status": 1 }],
+        "comparisonStatus": 2,
+        "comparisonList": []
+      },
+      {
+        "fieldType": 84,
+        "fieldName": "Final Checkdigit",
+        "lcid": 0,
+        "status": 1,
+        "value": "0",
+        "valueList": [
+          {
+            "value": "0",
+            "originalValue": "0",
+            "originalValidity": 1,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1474,
+              "left": 2179,
+              "right": 2216,
+              "top": 1423
+            },
+            "probability": 97
+          }
+        ],
+        "validityStatus": 1,
+        "validityList": [{ "source": "MRZ", "status": 1 }],
+        "comparisonStatus": 2,
+        "comparisonList": []
+      },
+      {
+        "fieldType": 4,
+        "fieldName": "Date of Issue",
+        "lcid": 0,
+        "status": 1,
+        "value": "27.04.2013",
+        "valueList": [
+          {
+            "value": "27.04.2013",
+            "originalValue": "230427",
+            "originalValidity": 1,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1480,
+              "left": 1509,
+              "right": 1787,
+              "top": 1424
+            },
+            "probability": 93
+          },
+          {
+            "value": "27.04.2013",
+            "originalValue": "27.04.2013",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 1,
+            "fieldRect": {
+              "bottom": 975,
+              "left": 1335,
+              "right": 2020,
+              "top": 768
+            },
+            "probability": 100
+          }
+        ],
+        "validityStatus": 1,
+        "validityList": [{ "source": "MRZ", "status": 1 }],
+        "comparisonStatus": 1,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 1 }
+        ]
+      },
+      {
+        "fieldType": 73,
+        "fieldName": "Authority Code",
+        "lcid": 0,
+        "status": 1,
+        "value": "660123",
+        "valueList": [
+          {
+            "value": "660123",
+            "originalValue": "660123",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1478,
+              "left": 1798,
+              "right": 2071,
+              "top": 1424
+            },
+            "probability": 93
+          },
+          {
+            "value": "660-123",
+            "originalValue": "660-123",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 1,
+            "fieldRect": {
+              "bottom": 972,
+              "left": 266,
+              "right": 1112,
+              "top": 717
+            },
+            "probability": 99
+          }
+        ],
+        "validityStatus": 2,
+        "validityList": [],
+        "comparisonStatus": 1,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 1 }
+        ]
+      },
+      {
+        "fieldType": 523,
+        "fieldName": "Years Since Issue",
+        "lcid": 0,
+        "status": 1,
+        "value": "2",
+        "valueList": [
+          {
+            "value": "2",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "probability": 0
+          },
+          {
+            "value": "2",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 1,
+            "probability": 0
+          }
+        ],
+        "validityStatus": 1,
+        "validityList": [{ "source": "MRZ", "status": 1 }],
+        "comparisonStatus": 1,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 1 }
+        ]
+      },
+      {
+        "fieldType": 185,
+        "fieldName": "Age",
+        "lcid": 0,
+        "status": 1,
+        "value": "32",
+        "valueList": [
+          {
+            "value": "32",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "probability": 0
+          },
+          {
+            "value": "32",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "probability": 0
+          }
+        ],
+        "validityStatus": 1,
+        "validityList": [{ "source": "MRZ", "status": 1 }],
+        "comparisonStatus": 1,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 1 }
+        ]
+      },
+      {
+        "fieldType": 522,
+        "fieldName": "Age at Issue",
+        "lcid": 0,
+        "status": 1,
+        "value": "20",
+        "valueList": [
+          {
+            "value": "20",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "probability": 0
+          },
+          {
+            "value": "20",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "probability": 0
+          }
+        ],
+        "validityStatus": 1,
+        "validityList": [{ "source": "MRZ", "status": 1 }],
+        "comparisonStatus": 1,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 1 }
+        ]
+      },
+      {
+        "fieldType": 364,
+        "fieldName": "RemainderTerm",
+        "lcid": 0,
+        "status": 1,
+        "value": "271",
+        "valueList": [
+          {
+            "value": "271",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "probability": 0
+          },
+          {
+            "value": "271",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "probability": 0
+          }
+        ],
+        "validityStatus": 1,
+        "validityList": [
+          { "source": "MRZ", "status": 1 },
+          { "source": "VISUAL", "status": 1 }
+        ],
+        "comparisonStatus": 1,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 1 }
+        ]
+      },
+      {
+        "fieldType": 133,
+        "fieldName": "Authority RUS",
+        "lcid": 1049,
+        "lcidName": "Russian",
+        "status": 1,
+        "value": "Санкт-Петербург",
+        "valueList": [
+          {
+            "value": "Санкт-Петербург",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "probability": 0
+          },
+          {
+            "value": "Санкт-Петербург",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "probability": 0
+          },
+          {
+            "value": "Санкт-Петербург",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "probability": 0
+          }
+        ],
+        "validityStatus": 1,
+        "validityList": [{ "source": "MRZ", "status": 1 }],
+        "comparisonStatus": 1,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 1 }
+        ]
+      },
+      {
+        "fieldType": 24,
+        "fieldName": "Authority",
+        "lcid": 9999,
+        "lcidName": "<unknown>",
+        "status": 1,
+        "value": "ТП №5 МВД РФ",
+        "valueList": [
+          {
+            "value": "ТП №5 МВД РФ",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "probability": 0
+          },
+          {
+            "value": "ТП №5 МВД РФ",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "probability": 0
+          }
+        ],
+        "validityStatus": 2,
+        "validityList": [],
+        "comparisonStatus": 1,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 1 }
+        ]
+      },
+      {
+        "fieldType": 11,
+        "fieldName": "Nationality",
+        "lcid": 0,
+        "status": 1,
+        "value": "Russian Federation",
+        "valueList": [
+          {
+            "value": "Russian Federation",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "probability": 0
+          }
+        ],
+        "validityStatus": 1,
+        "validityList": [{ "source": "MRZ", "status": 1 }],
+        "comparisonStatus": 2,
+        "comparisonList": []
+      },
+      {
+        "fieldType": 38,
+        "fieldName": "Issuing State Name",
+        "lcid": 0,
+        "status": 1,
+        "value": "Russian Federation",
+        "valueList": [
+          {
+            "value": "Russian Federation",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "probability": 0
+          },
+          {
+            "value": "Russian Federation",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "probability": 0
+          }
+        ],
+        "validityStatus": 1,
+        "validityList": [{ "source": "MRZ", "status": 1 }],
+        "comparisonStatus": 1,
+        "comparisonList": [
+          { "sourceLeft": "MRZ", "sourceRight": "VISUAL", "status": 1 }
+        ]
+      },
+      {
+        "fieldType": 35,
+        "fieldName": "MRZ Type",
+        "lcid": 0,
+        "status": 2,
+        "value": "ID-3",
+        "valueList": [
+          {
+            "value": "ID-3",
+            "originalValue": "ID-3",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "probability": 100
+          }
+        ],
+        "validityStatus": 2,
+        "validityList": [],
+        "comparisonStatus": 2,
+        "comparisonList": []
+      },
+      {
+        "fieldType": 6,
+        "fieldName": "Place of Birth",
+        "lcid": 0,
+        "status": 2,
+        "value": "GOR. EKATERINBURG",
+        "valueList": [
+          {
+            "value": "GOR. EKATERINBURG",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "probability": 95
+          }
+        ],
+        "validityStatus": 2,
+        "validityList": [],
+        "comparisonStatus": 2,
+        "comparisonList": []
+      },
+      {
+        "fieldType": 24,
+        "fieldName": "Authority",
+        "lcid": 0,
+        "status": 2,
+        "value": "GU MVD ROSSII",
+        "valueList": [
+          {
+            "value": "GU MVD ROSSII",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 1,
+            "probability": 90
+          }
+        ],
+        "validityStatus": 2,
+        "validityList": [],
+        "comparisonStatus": 2,
+        "comparisonList": []
+      },
+      {
+        "fieldType": 165,
+        "fieldName": "Booklet Number",
+        "lcid": 0,
+        "status": 2,
+        "value": "467632",
+        "valueList": [
+          {
+            "value": "467632",
+            "originalValue": "467632",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1216,
+              "left": 2021,
+              "right": 2247,
+              "top": 374
+            },
+            "probability": 100
+          },
+          {
+            "value": "467632",
+            "originalValue": "467632",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 1,
+            "fieldRect": {
+              "bottom": 1248,
+              "left": 88,
+              "right": 308,
+              "top": 343
+            },
+            "probability": 100
+          }
+        ],
+        "validityStatus": 2,
+        "validityList": [],
+        "comparisonStatus": 2,
+        "comparisonList": []
+      },
+      {
+        "fieldType": 12,
+        "fieldName": "Sex",
+        "lcid": 1049,
+        "lcidName": "Russian",
+        "status": 2,
+        "value": "МУЖ",
+        "valueList": [
+          {
+            "value": "МУЖ",
+            "originalValue": "МУЖ",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 828,
+              "left": 835,
+              "right": 1151,
+              "top": 647
+            },
+            "probability": 99
+          }
+        ],
+        "validityStatus": 2,
+        "validityList": [],
+        "comparisonStatus": 2,
+        "comparisonList": []
+      },
+      {
+        "fieldType": 6,
+        "fieldName": "Place of Birth",
+        "lcid": 1049,
+        "lcidName": "Russian",
+        "status": 2,
+        "value": "ГОР. ЕКАТЕРИНБУРГ",
+        "valueList": [
+          {
+            "value": "ГОР. ЕКАТЕРИНБУРГ",
+            "originalValue": "ГОР. ЕКАТЕРИНБУРГ",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 0,
+            "fieldRect": {
+              "bottom": 1231,
+              "left": 769,
+              "right": 2200,
+              "top": 759
+            },
+            "probability": 95
+          }
+        ],
+        "validityStatus": 2,
+        "validityList": [],
+        "comparisonStatus": 2,
+        "comparisonList": []
+      },
+      {
+        "fieldType": 24,
+        "fieldName": "Authority",
+        "lcid": 1049,
+        "lcidName": "Russian",
+        "status": 2,
+        "value": "МВД РФ",
+        "valueList": [
+          {
+            "value": "МВД РФ",
+            "originalValue": "МВД РФ",
+            "originalValidity": 2,
+            "source": "VISUAL",
+            "containerType": 17,
+            "pageIndex": 1,
+            "fieldRect": {
+              "bottom": 1355,
+              "left": 195,
+              "right": 2276,
+              "top": 907
+            },
+            "probability": 90
+          }
+        ],
+        "validityStatus": 2,
+        "validityList": [],
+        "comparisonStatus": 2,
+        "comparisonList": []
+      },
+      {
+        "fieldType": 25,
+        "fieldName": "Surname And Given Names",
+        "lcid": 9999,
+        "lcidName": "<unknown>",
+        "status": 2,
+        "value": "IVANOV IV2N IVANOVI3",
+        "valueList": [
+          {
+            "value": "IVANOV IV2N IVANOVI3",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "probability": 0
+          }
+        ],
+        "validityStatus": 2,
+        "validityList": [],
+        "comparisonStatus": 2,
+        "comparisonList": []
+      },
+      {
+        "fieldType": 8,
+        "fieldName": "Surname",
+        "lcid": 9999,
+        "lcidName": "<unknown>",
+        "status": 2,
+        "value": "IVANOV",
+        "valueList": [
+          {
+            "value": "IVANOV",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "probability": 0
+          }
+        ],
+        "validityStatus": 2,
+        "validityList": [],
+        "comparisonStatus": 2,
+        "comparisonList": []
+      },
+      {
+        "fieldType": 9,
+        "fieldName": "Given Names",
+        "lcid": 9999,
+        "lcidName": "<unknown>",
+        "status": 2,
+        "value": "IV2N",
+        "valueList": [
+          {
+            "value": "IV2N",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "probability": 0
+          }
+        ],
+        "validityStatus": 2,
+        "validityList": [],
+        "comparisonStatus": 2,
+        "comparisonList": []
+      },
+      {
+        "fieldType": 129,
+        "fieldName": "Fathers Name",
+        "lcid": 9999,
+        "lcidName": "<unknown>",
+        "status": 2,
+        "value": "IVANOVI3",
+        "valueList": [
+          {
+            "value": "IVANOVI3",
+            "originalValidity": 2,
+            "source": "MRZ",
+            "containerType": 3,
+            "pageIndex": 0,
+            "probability": 0
+          }
+        ],
+        "validityStatus": 2,
+        "validityList": [],
+        "comparisonStatus": 2,
+        "comparisonList": []
+      }
+    ],
+    "availableSourceList": [
+      { "source": "MRZ", "containerType": 3, "validityStatus": 1 },
+      { "source": "VISUAL", "containerType": 17, "validityStatus": 0 }
+    ]
+  },
+  "Info": {
+    "SDKVersion": "8.2.0.7502",
+    "FileVersion": "8.2",
+    "DeviceType": "7027 (OV 5Mp)"
+  }
+}
