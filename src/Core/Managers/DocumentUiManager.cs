@@ -40,10 +40,7 @@ public class DocumentUiManager : IDisposable
         if (_currentWindow == null) return;
 
         // Use BeginInvoke to avoid blocking
-        _currentWindow.BeginInvoke((MethodInvoker)delegate
-        {
-            _currentWindow?.Close();
-        });
+        _currentWindow.BeginInvoke(() => _currentWindow?.Close());
 
         if (_uiThread != null && _uiThread.IsAlive)
         {
