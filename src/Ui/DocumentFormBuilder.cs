@@ -1,3 +1,4 @@
+using PassRegulaParser.Core.Utils;
 using PassRegulaParser.Models;
 
 namespace PassRegulaParser.Ui;
@@ -6,7 +7,6 @@ public class DocumentFormBuilder(DocumentEditWindow window)
 {
     private readonly DocumentEditWindow _window = window;
     public Dictionary<string, Control> FieldControls { get; } = [];
-
     private readonly TableLayoutPanel _mainPanel = CreateMainPanel();
 
     private static TableLayoutPanel CreateMainPanel()
@@ -31,28 +31,25 @@ public class DocumentFormBuilder(DocumentEditWindow window)
     {
         _mainPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
         _mainPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
-
         AddReadOnlyField("Тип документа:", nameof(PassportData.DocumentType));
-        AddEditableField("ФИО:", nameof(PassportData.FullName));
-        AddEditableField("Серия/номер:", nameof(PassportData.SerialNumber));
-        AddEditableField("Город рождения:", nameof(PassportData.BirthCity));
-        AddEditableField("Дата рождения:", nameof(PassportData.BirthDate));
-        AddEditableField("Пол:", nameof(PassportData.Gender));
-        AddEditableField("Дата выдачи:", nameof(PassportData.IssueDate));
-        AddEditableField("Орган выдачи:", nameof(PassportData.Authority), true);
-        AddEditableField("Код подразделения:", nameof(PassportData.AuthorityCode));
+        AddEditableField("ФИО:", nameof(PassportData.FullName), false, FieldValidators.OnlyWordsAndSpaces);
+        AddEditableField("Серия/номер:", nameof(PassportData.SerialNumber), false, FieldValidators.OnlyDigits);
+        AddEditableField("Город рождения:", nameof(PassportData.BirthCity), false, FieldValidators.NotEmpty);
+        AddEditableField("Дата рождения:", nameof(PassportData.BirthDate), false, FieldValidators.IsDate);
+        AddEditableField("Пол:", nameof(PassportData.Gender), false, FieldValidators.OnlyWords);
+        AddEditableField("Дата выдачи:", nameof(PassportData.IssueDate),false, FieldValidators.IsDate);
+        AddEditableField("Орган выдачи:", nameof(PassportData.Authority), true, FieldValidators.NotEmpty);
+        AddEditableField("Код подразделения:", nameof(PassportData.AuthorityCode), false, FieldValidators.NotEmpty);
         AddPhotoField();
-        AddEditableField("Описание:", nameof(PassportData.Description), true);
+        AddEditableField("Описание:", nameof(PassportData.Description), true, FieldValidators.Any);
     }
 
     private void AddReadOnlyField(string labelText, string propertyName)
     {
         var propertyValue = _window.GetPropertyValue(propertyName)?.ToString() ?? "";
         var rowIndex = _mainPanel.RowCount;
-
         _mainPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         _mainPanel.RowCount++;
-
         var label = new Label
         {
             Text = labelText,
@@ -60,7 +57,6 @@ public class DocumentFormBuilder(DocumentEditWindow window)
             TextAlign = ContentAlignment.MiddleLeft,
             Margin = new Padding(0, 5, 10, 5)
         };
-
         var valueLabel = new Label
         {
             Text = propertyValue,
@@ -68,20 +64,21 @@ public class DocumentFormBuilder(DocumentEditWindow window)
             TextAlign = ContentAlignment.MiddleLeft,
             Margin = new Padding(0, 5, 0, 5)
         };
-
         _mainPanel.Controls.Add(label, 0, rowIndex);
         _mainPanel.Controls.Add(valueLabel, 1, rowIndex);
         FieldControls.Add(propertyName, valueLabel);
     }
 
-    private void AddEditableField(string labelText, string propertyName, bool isMultiline = false)
+    private void AddEditableField(
+        string labelText,
+        string propertyName,
+        bool isMultiline = false,
+        Func<string, bool>? isValid = null)
     {
         var propertyValue = _window.GetPropertyValue(propertyName)?.ToString() ?? "";
         var rowIndex = _mainPanel.RowCount;
-
         _mainPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         _mainPanel.RowCount++;
-
         var label = new Label
         {
             Text = labelText,
@@ -89,19 +86,17 @@ public class DocumentFormBuilder(DocumentEditWindow window)
             TextAlign = ContentAlignment.MiddleLeft,
             Margin = new Padding(0, 5, 10, 5)
         };
-
         Control inputControl = isMultiline
             ? CreateMultilineTextBox(propertyValue)
             : CreateSingleLineTextBox(propertyValue);
 
-        UpdateControlBackground(inputControl, propertyValue);
-
+        UpdateControlBackground(inputControl, propertyValue, isValid);
 
         if (inputControl is TextBox textBox)
         {
             textBox.TextChanged += (sender, e) =>
             {
-                UpdateControlBackground(textBox, textBox.Text);
+                UpdateControlBackground(textBox, textBox.Text, isValid);
             };
         }
 
@@ -127,16 +122,15 @@ public class DocumentFormBuilder(DocumentEditWindow window)
         Margin = new Padding(0, 5, 0, 5)
     };
 
-    private void UpdateControlBackground(Control control, string text)
+    private static void UpdateControlBackground(
+        Control control,
+        string text,
+        Func<string, bool>? isValid = null)
     {
-        if (string.IsNullOrWhiteSpace(text))
-        {
-            control.BackColor = Color.LightPink;
-        }
-        else
-        {
-            control.BackColor = SystemColors.Window;
-        }
+        bool isInvalid = isValid != null && !isValid(text);
+        control.BackColor = isInvalid
+            ? Color.FromArgb(255, 220, 180)
+            : SystemColors.Window;
     }
 
     private void AddPhotoField()
@@ -144,7 +138,6 @@ public class DocumentFormBuilder(DocumentEditWindow window)
         var rowIndex = _mainPanel.RowCount;
         _mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 160F));
         _mainPanel.RowCount++;
-
         var photoLabel = new Label
         {
             Text = "Фото:",
@@ -152,15 +145,12 @@ public class DocumentFormBuilder(DocumentEditWindow window)
             TextAlign = ContentAlignment.MiddleLeft,
             Margin = new Padding(0, 5, 10, 5)
         };
-
         var photoBox = new PictureBox
         {
             Dock = DockStyle.Fill,
             SizeMode = PictureBoxSizeMode.Zoom
         };
-
         LoadPhotoIntoPictureBox(photoBox);
-
         _mainPanel.Controls.Add(photoLabel, 0, rowIndex);
         _mainPanel.Controls.Add(photoBox, 1, rowIndex);
         FieldControls.Add(nameof(PassportData.PhotoBase64), photoBox);
@@ -169,7 +159,6 @@ public class DocumentFormBuilder(DocumentEditWindow window)
     private void LoadPhotoIntoPictureBox(PictureBox photoBox)
     {
         var photoBase64 = _window.GetPropertyValue(nameof(PassportData.PhotoBase64)) as string;
-
         if (!string.IsNullOrEmpty(photoBase64))
         {
             try
@@ -208,7 +197,6 @@ public class DocumentFormBuilder(DocumentEditWindow window)
         var rowIndex = _mainPanel.RowCount;
         _mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
         _mainPanel.RowCount++;
-
         var saveButton = new Button
         {
             Text = "Сохранить",
@@ -217,7 +205,6 @@ public class DocumentFormBuilder(DocumentEditWindow window)
             Margin = new Padding(0, 10, 0, 0)
         };
         saveButton.Click += (sender, e) => _window.SaveAndClose();
-
         _mainPanel.SetColumnSpan(saveButton, 2);
         _mainPanel.Controls.Add(saveButton, 0, rowIndex);
     }
