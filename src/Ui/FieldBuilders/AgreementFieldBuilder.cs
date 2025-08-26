@@ -1,3 +1,4 @@
+using PassRegulaParser.Core.Utils;
 using PassRegulaParser.Models;
 
 namespace PassRegulaParser.Ui.FieldBuilders;
@@ -31,7 +32,6 @@ public class AgreementFieldBuilder
             Margin = new Padding(0, 5, 0, 5),
             AutoSize = true
         };
-
         _mainPanel.SetColumnSpan(agreementCheckBox, 2);
         _mainPanel.Controls.Add(agreementCheckBox, 0, rowIndex);
 
@@ -41,7 +41,7 @@ public class AgreementFieldBuilder
 
         var daysLabel = new Label
         {
-            Text = "Срок хранения (дней):",
+            Text = "Срок хранения:",
             Dock = DockStyle.Fill,
             TextAlign = ContentAlignment.MiddleLeft,
             Margin = new Padding(0, 5, 10, 5)
@@ -49,9 +49,30 @@ public class AgreementFieldBuilder
 
         var daysTextBox = new TextBox
         {
-            Text = _window.GetPropertyValue("DataSaveAgreementDateEnd")?.ToString() ?? "",
+            Text = _window.GetPropertyValue(nameof(PassportData.DataSaveAgreementDateEnd))?.ToString() ?? "",
             Dock = DockStyle.Fill,
-            Margin = new Padding(0, 5, 0, 5)
+            Margin = new Padding(0, 5, 0, 5),
+            MaxLength = 10 // ДД.ММ.ГГГГ = 10
+        };
+
+        daysTextBox.KeyPress += (sender, e) =>
+        {
+            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        };
+
+        daysTextBox.TextChanged += (sender, e) =>
+        {
+            TextBox textBox = (TextBox)sender!;
+            string formattedText = DateFormatter.FormatDateText(textBox.Text);
+
+            if (textBox.Text != formattedText)
+            {
+                textBox.Text = formattedText;
+                textBox.SelectionStart = formattedText.Length;
+            }
         };
 
         _mainPanel.Controls.Add(daysLabel, 0, daysRowIndex);
