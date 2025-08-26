@@ -23,122 +23,72 @@ public class DocumentFormBuilder(DocumentEditWindow window)
 
     public void BuildForm()
     {
+        var photoBuilder = new PhotoFieldBuilder(_mainPanel, _window, FieldControls);
+        var agreementBuilder = new AgreementFieldBuilder(_mainPanel, _window, FieldControls);
+        var buttonBuilder = new SaveButtonBuilder(_mainPanel, _window);
+
         _mainPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
         _mainPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
 
-        InitializeFields();
-        var photoBuilder = new PhotoFieldBuilder(_mainPanel, _window, FieldControls);
+        new ReadOnlyField(
+            _mainPanel, "Тип документа:", nameof(PassportData.DocumentType), _window, FieldControls
+            ).AddToPanel();
+
+        new EditableField(
+            _mainPanel, "ФИО:", nameof(PassportData.FullName),
+            FieldValidators.OnlyWordsAndSpaces, _window, FieldControls
+            ).AddToPanel();
+
+        new EditableField(
+            _mainPanel, "Серия:", nameof(PassportData.Serial),
+            FieldValidators.OnlyDigits, _window, FieldControls
+            ).AddToPanel();
+
+        new EditableField(
+            _mainPanel, "Номер:", nameof(PassportData.Number),
+            FieldValidators.OnlyDigits, _window, FieldControls
+            ).AddToPanel();
+
+        new EditableField(
+            _mainPanel, "Место рождения:", nameof(PassportData.BirthCity),
+            FieldValidators.NotEmpty, _window, FieldControls
+            ).AddToPanel();
+
+        new EditableField(
+            _mainPanel, "Дата рождения:", nameof(PassportData.BirthDate),
+            FieldValidators.IsDate, _window, FieldControls
+            ).AddToPanel();
+
+        new EditableField(
+            _mainPanel, "Пол:", nameof(PassportData.Gender),
+            FieldValidators.OnlyWords, _window, FieldControls
+            ).AddToPanel();
+
+        new EditableField(
+            _mainPanel, "Дата выдачи:", nameof(PassportData.IssueDate),
+            FieldValidators.IsDate, _window, FieldControls
+            ).AddToPanel();
+
+        new EditableMultilineField(
+                _mainPanel, "Орган выдачи:", nameof(PassportData.Authority),
+                FieldValidators.NotEmpty, _window, FieldControls
+            ).AddToPanel();
+
+        new EditableField(
+            _mainPanel, "Код подразделения:", nameof(PassportData.AuthorityCode),
+            FieldValidators.NotEmpty, _window, FieldControls
+            ).AddToPanel();
+
         photoBuilder.AddPhotoField();
+        
+        new EditableMultilineField(
+            _mainPanel, "Описание:", nameof(PassportData.Description),
+            FieldValidators.Any, _window, FieldControls
+            ).AddToPanel();
 
-        var agreementBuilder = new AgreementFieldBuilder(_mainPanel, _window, FieldControls);
         agreementBuilder.AddAgreementCheckboxAndDaysField();
-
-        var buttonBuilder = new SaveButtonBuilder(_mainPanel, _window);
         buttonBuilder.AddSaveButton();
+        
         _window.Controls.Add(_mainPanel);
-    }
-
-    private void InitializeFields()
-    {
-        AddReadOnlyField("Тип документа:", nameof(PassportData.DocumentType));
-        AddEditableField("ФИО:", nameof(PassportData.FullName), false, FieldValidators.OnlyWordsAndSpaces);
-        AddEditableField("Серия:", nameof(PassportData.Serial), false, FieldValidators.OnlyDigits);
-        AddEditableField("Номер:", nameof(PassportData.Number), false, FieldValidators.OnlyDigits);
-        AddEditableField("Город рождения:", nameof(PassportData.BirthCity), false, FieldValidators.NotEmpty);
-        AddEditableField("Дата рождения:", nameof(PassportData.BirthDate), false, FieldValidators.IsDate);
-        AddEditableField("Пол:", nameof(PassportData.Gender), false, FieldValidators.OnlyWords);
-        AddEditableField("Дата выдачи:", nameof(PassportData.IssueDate), false, FieldValidators.IsDate);
-        AddEditableField("Орган выдачи:", nameof(PassportData.Authority), true, FieldValidators.NotEmpty);
-        AddEditableField("Код подразделения:", nameof(PassportData.AuthorityCode), false, FieldValidators.NotEmpty);
-        AddEditableField("Описание:", nameof(PassportData.Description), true, FieldValidators.Any);
-    }
-
-    private void AddReadOnlyField(string labelText, string propertyName)
-    {
-        var propertyValue = _window.GetPropertyValue(propertyName)?.ToString() ?? "";
-        var rowIndex = _mainPanel.RowCount;
-        _mainPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        _mainPanel.RowCount++;
-        var label = new Label
-        {
-            Text = labelText,
-            Dock = DockStyle.Fill,
-            TextAlign = ContentAlignment.MiddleLeft,
-            Margin = new Padding(0, 5, 10, 5)
-        };
-        var valueLabel = new Label
-        {
-            Text = propertyValue,
-            Dock = DockStyle.Fill,
-            TextAlign = ContentAlignment.MiddleLeft,
-            Margin = new Padding(0, 5, 0, 5)
-        };
-        _mainPanel.Controls.Add(label, 0, rowIndex);
-        _mainPanel.Controls.Add(valueLabel, 1, rowIndex);
-        FieldControls.Add(propertyName, valueLabel);
-    }
-
-    private void AddEditableField(
-        string labelText,
-        string propertyName,
-        bool isMultiline,
-        Func<string, bool> isValid)
-    {
-        var propertyValue = _window.GetPropertyValue(propertyName)?.ToString() ?? "";
-        var rowIndex = _mainPanel.RowCount;
-        _mainPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        _mainPanel.RowCount++;
-        var label = new Label
-        {
-            Text = labelText,
-            Dock = DockStyle.Fill,
-            TextAlign = ContentAlignment.MiddleLeft,
-            Margin = new Padding(0, 5, 10, 5)
-        };
-        Control inputControl = isMultiline
-            ? CreateMultilineTextBox(propertyValue)
-            : CreateSingleLineTextBox(propertyValue);
-
-        UpdateControlBackground(inputControl, propertyValue, isValid);
-
-        if (inputControl is TextBox textBox)
-        {
-            textBox.TextChanged += (sender, e) =>
-            {
-                UpdateControlBackground(textBox, textBox.Text, isValid);
-            };
-        }
-
-        _mainPanel.Controls.Add(label, 0, rowIndex);
-        _mainPanel.Controls.Add(inputControl, 1, rowIndex);
-        FieldControls.Add(propertyName, inputControl);
-    }
-
-    private static TextBox CreateSingleLineTextBox(string text) => new()
-    {
-        Text = text,
-        Dock = DockStyle.Fill,
-        Margin = new Padding(0, 5, 0, 5)
-    };
-
-    private static TextBox CreateMultilineTextBox(string text) => new()
-    {
-        Text = text,
-        Dock = DockStyle.Fill,
-        Multiline = true,
-        ScrollBars = ScrollBars.Vertical,
-        Height = 60,
-        Margin = new Padding(0, 5, 0, 5)
-    };
-
-    private static void UpdateControlBackground(
-        Control control,
-        string text,
-        Func<string, bool>? isValid = null)
-    {
-        bool isInvalid = isValid != null && !isValid(text);
-        control.BackColor = isInvalid
-            ? Color.FromArgb(255, 220, 180)
-            : SystemColors.Window;
     }
 }
