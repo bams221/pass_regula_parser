@@ -1,5 +1,6 @@
 using PassRegulaParser.Core.Utils;
 using PassRegulaParser.Models;
+using PassRegulaParser.Ui.FieldBuilders;
 
 namespace PassRegulaParser.Ui;
 
@@ -23,6 +24,8 @@ public class DocumentFormBuilder(DocumentEditWindow window)
     public void BuildForm()
     {
         InitializeFields();
+        var photoBuilder = new PhotoFieldBuilder(_mainPanel, _window, FieldControls);
+        photoBuilder.AddPhotoField();
         AddAgreementCheckboxAndDaysField();
         AddSaveButton();
         _window.Controls.Add(_mainPanel);
@@ -42,7 +45,6 @@ public class DocumentFormBuilder(DocumentEditWindow window)
         AddEditableField("Дата выдачи:", nameof(PassportData.IssueDate), false, FieldValidators.IsDate);
         AddEditableField("Орган выдачи:", nameof(PassportData.Authority), true, FieldValidators.NotEmpty);
         AddEditableField("Код подразделения:", nameof(PassportData.AuthorityCode), false, FieldValidators.NotEmpty);
-        AddPhotoField();
         AddEditableField("Описание:", nameof(PassportData.Description), true, FieldValidators.Any);
     }
 
@@ -133,51 +135,6 @@ public class DocumentFormBuilder(DocumentEditWindow window)
         control.BackColor = isInvalid
             ? Color.FromArgb(255, 220, 180)
             : SystemColors.Window;
-    }
-
-    private void AddPhotoField()
-    {
-        var rowIndex = _mainPanel.RowCount;
-        _mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 160F));
-        _mainPanel.RowCount++;
-        var photoLabel = new Label
-        {
-            Text = "Фото:",
-            Dock = DockStyle.Fill,
-            TextAlign = ContentAlignment.MiddleLeft,
-            Margin = new Padding(0, 5, 10, 5)
-        };
-        var photoBox = new PictureBox
-        {
-            Dock = DockStyle.Fill,
-            SizeMode = PictureBoxSizeMode.Zoom
-        };
-        LoadPhotoIntoPictureBox(photoBox);
-        _mainPanel.Controls.Add(photoLabel, 0, rowIndex);
-        _mainPanel.Controls.Add(photoBox, 1, rowIndex);
-        FieldControls.Add(nameof(PassportData.PhotoBase64), photoBox);
-    }
-
-    private void LoadPhotoIntoPictureBox(PictureBox photoBox)
-    {
-        var photoBase64 = _window.GetPropertyValue(nameof(PassportData.PhotoBase64)) as string;
-        if (!string.IsNullOrEmpty(photoBase64))
-        {
-            try
-            {
-                byte[]? imageBytes = Convert.FromBase64String(photoBase64);
-                using var ms = new MemoryStream(imageBytes);
-                photoBox.Image = Image.FromStream(ms);
-            }
-            catch
-            {
-                SetErrorState(photoBox, "Не удалось загрузить фото");
-            }
-        }
-        else
-        {
-            SetErrorState(photoBox, "Фото отсутствует");
-        }
     }
 
     private static void SetErrorState(PictureBox photoBox, string message)
