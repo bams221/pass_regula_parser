@@ -23,10 +23,16 @@ public class DocumentFormBuilder(DocumentEditWindow window)
 
     public void BuildForm()
     {
+        _mainPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+        _mainPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
+
         InitializeFields();
         var photoBuilder = new PhotoFieldBuilder(_mainPanel, _window, FieldControls);
         photoBuilder.AddPhotoField();
-        AddAgreementCheckboxAndDaysField();
+
+        var agreementBuilder = new AgreementFieldBuilder(_mainPanel, _window, FieldControls);
+        agreementBuilder.AddAgreementCheckboxAndDaysField();
+
         var buttonBuilder = new SaveButtonBuilder(_mainPanel, _window);
         buttonBuilder.AddSaveButton();
         _window.Controls.Add(_mainPanel);
@@ -34,8 +40,6 @@ public class DocumentFormBuilder(DocumentEditWindow window)
 
     private void InitializeFields()
     {
-        _mainPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-        _mainPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
         AddReadOnlyField("Тип документа:", nameof(PassportData.DocumentType));
         AddEditableField("ФИО:", nameof(PassportData.FullName), false, FieldValidators.OnlyWordsAndSpaces);
         AddEditableField("Серия:", nameof(PassportData.Serial), false, FieldValidators.OnlyDigits);
@@ -136,72 +140,5 @@ public class DocumentFormBuilder(DocumentEditWindow window)
         control.BackColor = isInvalid
             ? Color.FromArgb(255, 220, 180)
             : SystemColors.Window;
-    }
-
-    private static void SetErrorState(PictureBox photoBox, string message)
-    {
-        photoBox.Image = null;
-        photoBox.BackColor = Color.LightGray;
-        photoBox.Paint += (sender, e) =>
-        {
-            using var font = new Font("Arial", 9);
-            var textSize = e.Graphics.MeasureString(message, font);
-            var x = (photoBox.Width - textSize.Width) / 2;
-            var y = (photoBox.Height - textSize.Height) / 2;
-            e.Graphics.DrawString(message, font, Brushes.Black, x, y);
-        };
-    }
-
-    private void AddAgreementCheckboxAndDaysField()
-    {
-        var rowIndex = _mainPanel.RowCount;
-        _mainPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        _mainPanel.RowCount++;
-
-        var agreementCheckBox = new CheckBox
-        {
-            Text = "Даю согласие на обработку и хранение персональных данных",
-            Dock = DockStyle.Fill,
-            Margin = new Padding(0, 5, 0, 5),
-            AutoSize = true
-        };
-        _mainPanel.SetColumnSpan(agreementCheckBox, 2);
-        _mainPanel.Controls.Add(agreementCheckBox, 0, rowIndex);
-
-        // Поле для ввода количества дней (по умолчанию скрыто)
-        var daysRowIndex = _mainPanel.RowCount;
-        _mainPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        _mainPanel.RowCount++;
-
-        var daysLabel = new Label
-        {
-            Text = "Срок хранения (дней):",
-            Dock = DockStyle.Fill,
-            TextAlign = ContentAlignment.MiddleLeft,
-            Margin = new Padding(0, 5, 10, 5)
-        };
-
-        var daysTextBox = new TextBox
-        {
-            Text = _window.GetPropertyValue("DataSaveAgreementDateEnd")?.ToString() ?? "",
-            Dock = DockStyle.Fill,
-            Margin = new Padding(0, 5, 0, 5)
-        };
-
-        _mainPanel.Controls.Add(daysLabel, 0, daysRowIndex);
-        _mainPanel.Controls.Add(daysTextBox, 1, daysRowIndex);
-
-        // Логика показа/скрытия поля в зависимости от чекбокса
-        daysTextBox.Visible = agreementCheckBox.Checked;
-        daysLabel.Visible = agreementCheckBox.Checked;
-
-        agreementCheckBox.CheckedChanged += (sender, e) =>
-        {
-            daysTextBox.Visible = agreementCheckBox.Checked;
-            daysLabel.Visible = agreementCheckBox.Checked;
-        };
-
-        FieldControls.Add(nameof(PassportData.DataSaveAgreement), agreementCheckBox);
-        FieldControls.Add(nameof(PassportData.DataSaveAgreementDateEnd), daysTextBox);
     }
 }
