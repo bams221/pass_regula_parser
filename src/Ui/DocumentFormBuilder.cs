@@ -73,8 +73,8 @@ public class DocumentFormBuilder(DocumentEditWindow window)
     private void AddEditableField(
         string labelText,
         string propertyName,
-        bool isMultiline = false,
-        Func<string, bool>? isValid = null)
+        bool isMultiline,
+        Func<string, bool>isValid)
     {
         var propertyValue = _window.GetPropertyValue(propertyName)?.ToString() ?? "";
         var rowIndex = _mainPanel.RowCount;
@@ -179,7 +179,7 @@ public class DocumentFormBuilder(DocumentEditWindow window)
         }
     }
 
-    private void SetErrorState(PictureBox photoBox, string message)
+    private static void SetErrorState(PictureBox photoBox, string message)
     {
         photoBox.Image = null;
         photoBox.BackColor = Color.LightGray;
