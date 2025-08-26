@@ -11,9 +11,13 @@ public class DocumentDataUpdater(PassportData documentData)
         foreach (var field in fieldControls)
         {
             var control = field.Value;
-            var value = control is TextBox textBox ? textBox.Text :
-                       control is Label label ? label.Text :
-                       null;
+            var value = control switch
+            {
+                TextBox textBox => textBox.Text,
+                Label label => label.Text,
+                CheckBox checkBox => checkBox.Checked.ToString(),
+                _ => null
+            };
 
             if (value != null)
             {

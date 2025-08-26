@@ -23,7 +23,8 @@ public class DocumentFormBuilder(DocumentEditWindow window)
     public void BuildForm()
     {
         InitializeFields();
-        InitializeSaveButton();
+        AddAgreementCheckboxAndDaysField();
+        AddSaveButton();
         _window.Controls.Add(_mainPanel);
     }
 
@@ -38,7 +39,7 @@ public class DocumentFormBuilder(DocumentEditWindow window)
         AddEditableField("Город рождения:", nameof(PassportData.BirthCity), false, FieldValidators.NotEmpty);
         AddEditableField("Дата рождения:", nameof(PassportData.BirthDate), false, FieldValidators.IsDate);
         AddEditableField("Пол:", nameof(PassportData.Gender), false, FieldValidators.OnlyWords);
-        AddEditableField("Дата выдачи:", nameof(PassportData.IssueDate),false, FieldValidators.IsDate);
+        AddEditableField("Дата выдачи:", nameof(PassportData.IssueDate), false, FieldValidators.IsDate);
         AddEditableField("Орган выдачи:", nameof(PassportData.Authority), true, FieldValidators.NotEmpty);
         AddEditableField("Код подразделения:", nameof(PassportData.AuthorityCode), false, FieldValidators.NotEmpty);
         AddPhotoField();
@@ -74,7 +75,7 @@ public class DocumentFormBuilder(DocumentEditWindow window)
         string labelText,
         string propertyName,
         bool isMultiline,
-        Func<string, bool>isValid)
+        Func<string, bool> isValid)
     {
         var propertyValue = _window.GetPropertyValue(propertyName)?.ToString() ?? "";
         var rowIndex = _mainPanel.RowCount;
@@ -193,7 +194,60 @@ public class DocumentFormBuilder(DocumentEditWindow window)
         };
     }
 
-    private void InitializeSaveButton()
+    private void AddAgreementCheckboxAndDaysField()
+    {
+        var rowIndex = _mainPanel.RowCount;
+        _mainPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        _mainPanel.RowCount++;
+
+        var agreementCheckBox = new CheckBox
+        {
+            Text = "Даю согласие на обработку и хранение персональных данных",
+            Dock = DockStyle.Fill,
+            Margin = new Padding(0, 5, 0, 5),
+            AutoSize = true
+        };
+        _mainPanel.SetColumnSpan(agreementCheckBox, 2);
+        _mainPanel.Controls.Add(agreementCheckBox, 0, rowIndex);
+
+        // Поле для ввода количества дней (по умолчанию скрыто)
+        var daysRowIndex = _mainPanel.RowCount;
+        _mainPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        _mainPanel.RowCount++;
+
+        var daysLabel = new Label
+        {
+            Text = "Срок хранения (дней):",
+            Dock = DockStyle.Fill,
+            TextAlign = ContentAlignment.MiddleLeft,
+            Margin = new Padding(0, 5, 10, 5)
+        };
+
+        var daysTextBox = new TextBox
+        {
+            Text = _window.GetPropertyValue("DataSaveAgreementDateEnd")?.ToString() ?? "",
+            Dock = DockStyle.Fill,
+            Margin = new Padding(0, 5, 0, 5)
+        };
+
+        _mainPanel.Controls.Add(daysLabel, 0, daysRowIndex);
+        _mainPanel.Controls.Add(daysTextBox, 1, daysRowIndex);
+
+        // Логика показа/скрытия поля в зависимости от чекбокса
+        daysTextBox.Visible = agreementCheckBox.Checked;
+        daysLabel.Visible = agreementCheckBox.Checked;
+
+        agreementCheckBox.CheckedChanged += (sender, e) =>
+        {
+            daysTextBox.Visible = agreementCheckBox.Checked;
+            daysLabel.Visible = agreementCheckBox.Checked;
+        };
+
+        FieldControls.Add(nameof(PassportData.DataSaveAgreement), agreementCheckBox);
+        FieldControls.Add(nameof(PassportData.DataSaveAgreementDateEnd), daysTextBox);
+    }
+
+    private void AddSaveButton()
     {
         var rowIndex = _mainPanel.RowCount;
         _mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));

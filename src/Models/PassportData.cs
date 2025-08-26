@@ -14,8 +14,8 @@ public class PassportData : DocumentData
     public string? PhotoBase64 { get; set; }
 
     public override string ToString() =>
-    $@"Passport Data:
-    Document Type: {DocumentType}
+    base.ToString() +
+    $@"
     Full Name: {FullName}
     Serial: {Serial}
     Number: {Number}
@@ -24,6 +24,5 @@ public class PassportData : DocumentData
     Gender: {Gender}
     Issue Date: {IssueDate}
     Authority: {Authority}
-    Authority Code: {AuthorityCode}
-    Description: {Description}";
+    Authority Code: {AuthorityCode};";
 }
