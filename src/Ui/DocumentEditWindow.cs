@@ -37,4 +37,18 @@ public class DocumentEditWindow : Form
         DialogResult = DialogResult.OK;
         Close();
     }
+
+    public PassportData GetDocumentData() => _documentData;
+
+    public object? GetPropertyValue(string propertyName)
+    {
+        var property = typeof(PassportData).GetProperty(propertyName);
+        return property?.GetValue(_documentData);
+    }
+
+    public T? GetPropertyValue<T>(string propertyName)
+    {
+        var value = GetPropertyValue(propertyName);
+        return value is T typedValue ? typedValue : default;
+    }
 }
