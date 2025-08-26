@@ -16,7 +16,8 @@ public class RussianPassportParserNodeTests
         var result = node.Process(passportData);
 
         Assert.Equal("ИВАНОВ ИВАН ИВАНОВИЧ", result.FullName);
-        Assert.Equal("2043467632", result.SerialNumber);
+        Assert.Equal("2043", result.Serial);
+        Assert.Equal("467632", result.Number);
         Assert.Equal("ГОР. ЕКАТЕРИНБУРГ", result.BirthCity);
         Assert.Equal("04.06.1993", result.BirthDate);
         Assert.Equal("МУЖ", result.Gender);

@@ -14,12 +14,14 @@ public class DocumentDataUpdaterTests
         var controls = new Dictionary<string, Control>
         {
             { "FullName", new TextBox { Text = "Иванов Иван Иванович" } },
-            { "SerialNumber", new TextBox { Text = "1234567890" } }
+            { "Serial", new TextBox { Text = "1234" } },
+            { "Number", new TextBox { Text = "567890" } }
         };
 
         updater.UpdateFromControls(controls);
 
         Assert.Equal("Иванов Иван Иванович", passportData.FullName);
-        Assert.Equal("1234567890", passportData.SerialNumber);
+        Assert.Equal("1234", passportData.Serial);
+        Assert.Equal("567890", passportData.Number);
     }
 }

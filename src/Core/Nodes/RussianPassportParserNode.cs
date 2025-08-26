@@ -19,7 +19,8 @@ public class RussianPassportParserNode(string doctypeDataJsonFilepath) : INodeEl
             language: "Russian"
         );
 
-        passportData.SerialNumber = fieldList.GetValue("Document Number");
+        passportData.Serial = fieldList.GetValue("Document Series");
+        passportData.Number = fieldList.GetValue("Booklet Number");
         passportData.BirthDate = fieldList.GetValue("Date of Birth");
         passportData.FullName = fieldList.GetValueRussian("Surname And Given Names");
         passportData.Gender = fieldList.GetValueRussian("Sex");

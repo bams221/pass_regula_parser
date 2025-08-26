@@ -33,7 +33,8 @@ public class DocumentFormBuilder(DocumentEditWindow window)
         _mainPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
         AddReadOnlyField("Тип документа:", nameof(PassportData.DocumentType));
         AddEditableField("ФИО:", nameof(PassportData.FullName), false, FieldValidators.OnlyWordsAndSpaces);
-        AddEditableField("Серия/номер:", nameof(PassportData.SerialNumber), false, FieldValidators.OnlyDigits);
+        AddEditableField("Серия:", nameof(PassportData.Serial), false, FieldValidators.OnlyDigits);
+        AddEditableField("Номер:", nameof(PassportData.Number), false, FieldValidators.OnlyDigits);
         AddEditableField("Город рождения:", nameof(PassportData.BirthCity), false, FieldValidators.NotEmpty);
         AddEditableField("Дата рождения:", nameof(PassportData.BirthDate), false, FieldValidators.IsDate);
         AddEditableField("Пол:", nameof(PassportData.Gender), false, FieldValidators.OnlyWords);

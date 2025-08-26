@@ -3,7 +3,8 @@ namespace PassRegulaParser.Models;
 public class PassportData : DocumentData
 {
     public string? FullName { get; set; }
-    public string? SerialNumber { get; set; }
+    public string? Serial { get; set; }
+    public string? Number { get; set; }
     public string? BirthCity { get; set; }
     public string? BirthDate { get; set; }
     public string? Gender { get; set; }
@@ -16,7 +17,8 @@ public class PassportData : DocumentData
     $@"Passport Data:
     Document Type: {DocumentType}
     Full Name: {FullName}
-    Serial Number: {SerialNumber}
+    Serial: {Serial}
+    Number: {Number}
     Birth City: {BirthCity}
     Birth Date: {BirthDate}
     Gender: {Gender}
