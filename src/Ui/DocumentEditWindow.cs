@@ -1,5 +1,5 @@
 using PassRegulaParser.Models;
-using PassRegulaParser.Ui.Utils;
+using PassRegulaParser.Api;
 
 namespace PassRegulaParser.Ui;
 
@@ -8,12 +8,14 @@ public class DocumentEditWindow : Form
     private readonly PassportData _documentData;
     private readonly DocumentFormBuilder _formBuilder;
     private readonly DocumentDataUpdater _dataUpdater;
+    private readonly ApiClient _apiService;
 
     public DocumentEditWindow(PassportData passportData)
     {
         _documentData = passportData;
         _formBuilder = new DocumentFormBuilder(this);
         _dataUpdater = new DocumentDataUpdater(_documentData);
+        _apiService = new ApiClient();
 
         InitializeWindowProperties();
         _formBuilder.BuildForm();
@@ -22,7 +24,7 @@ public class DocumentEditWindow : Form
     private void InitializeWindowProperties()
     {
         Text = "Данные отсканированного документа";
-        Size = new Size(500, 800);
+        Size = new Size(550, 850);
         MinimumSize = new Size(400, 600);
         FormBorderStyle = FormBorderStyle.Sizable;
         MaximizeBox = true;
@@ -30,10 +32,11 @@ public class DocumentEditWindow : Form
         TopMost = true;
     }
 
-    public void SaveAndClose()
+    public async void SaveAndClose()
     {
         _dataUpdater.UpdateFromControls(_formBuilder.FieldControls);
-        DocumentDataSaver.SaveToJson(_documentData);
+        // DocumentDataSaver.SaveToJson(_documentData);
+        await _apiService.SendPassportDataAsync(_documentData);
         DialogResult = DialogResult.OK;
         Close();
     }
