@@ -6,10 +6,10 @@ namespace PassRegulaParser.Ui.Utils;
 public static class DocumentDataSaver
 {
     static readonly JsonSerializerOptions _options = new()
-        {
-            WriteIndented = true,
-            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-        };
+    {
+        WriteIndented = true,
+        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+    };
 
     public static void SaveToJson(PassportData data)
     {
