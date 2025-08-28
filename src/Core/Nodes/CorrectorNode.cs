@@ -3,7 +3,7 @@ using PassRegulaParser.Models;
 
 namespace PassRegulaParser.Core.Nodes;
 
-class CorrectorNode() : INodeElement
+public class CorrectorNode() : INodeElement
 {
     public PassportData Process(PassportData passportData)
     {
