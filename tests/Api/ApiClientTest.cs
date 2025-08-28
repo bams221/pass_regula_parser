@@ -3,6 +3,7 @@ using System.Reflection;
 using Moq;
 using Moq.Protected;
 using PassRegulaParser.Api;
+using PassRegulaParser.Core.Interfaces;
 using PassRegulaParser.Models;
 
 namespace PassRegulaParser.Tests.Api;
@@ -12,19 +13,29 @@ public class ApiClientTests
     private readonly Mock<HttpMessageHandler> _mockHandler;
     private readonly HttpClient _httpClient;
     private readonly ApiClient _apiClient;
+    private readonly Mock<IMessageBoxService> _mockMessageBoxService;
 
     public ApiClientTests()
     {
         _mockHandler = new Mock<HttpMessageHandler>();
+        _mockMessageBoxService = new Mock<IMessageBoxService>();
+
         _httpClient = new HttpClient(_mockHandler.Object)
         {
             BaseAddress = new Uri("http://localhost:5000/")
         };
+
         _apiClient = new ApiClient();
+
         // Replace the default HttpClient with our mocked one
         typeof(ApiClient)
             .GetField("_httpClient", BindingFlags.NonPublic | BindingFlags.Instance)
             ?.SetValue(_apiClient, _httpClient);
+
+        // Inject mock message box service
+        typeof(ApiClient)
+            .GetField("_messageBoxService", BindingFlags.NonPublic | BindingFlags.Instance)
+            ?.SetValue(_apiClient, _mockMessageBoxService.Object);
     }
 
     [Fact]
@@ -48,10 +59,11 @@ public class ApiClientTests
         var result = await _apiClient.SendPassportDataAsync(passportData);
 
         Assert.True(result);
+        _mockMessageBoxService.VerifyNoOtherCalls();
     }
 
     [Fact]
-    public async Task SendPassportDataAsync_Failure_ReturnsFalse()
+    public async Task SendPassportDataAsync_Failure_ReturnsFalseAndShowsErrorMessage()
     {
         var passportData = new PassportData
         {
@@ -74,10 +86,13 @@ public class ApiClientTests
         var result = await _apiClient.SendPassportDataAsync(passportData);
 
         Assert.False(result);
+        _mockMessageBoxService.Verify(
+            x => x.ShowError(It.IsAny<string>(), It.IsAny<string>()),
+            Times.Once);
     }
 
     [Fact]
-    public async Task SendPassportDataAsync_HttpRequestException_Throws()
+    public async Task SendPassportDataAsync_HttpRequestException_ReturnsFalseAndShowsErrorMessage()
     {
         var passportData = new PassportData
         {
@@ -93,12 +108,16 @@ public class ApiClientTests
                 ItExpr.IsAny<CancellationToken>())
             .ThrowsAsync(new HttpRequestException("Network error"));
 
-        await Assert.ThrowsAsync<HttpRequestException>(
-            () => _apiClient.SendPassportDataAsync(passportData));
+        var result = await _apiClient.SendPassportDataAsync(passportData);
+
+        Assert.False(result);
+        _mockMessageBoxService.Verify(
+            x => x.ShowError(It.IsAny<string>(), "Ошибка сети"),
+            Times.Once);
     }
 
     [Fact]
-    public async Task SendPassportDataAsync_TaskCanceledException_Throws()
+    public async Task SendPassportDataAsync_TaskCanceledException_ReturnsFalseAndShowsWarning()
     {
         var passportData = new PassportData
         {
@@ -114,12 +133,16 @@ public class ApiClientTests
                 ItExpr.IsAny<CancellationToken>())
             .ThrowsAsync(new TaskCanceledException("Request timeout"));
 
-        await Assert.ThrowsAsync<TaskCanceledException>(
-            () => _apiClient.SendPassportDataAsync(passportData));
+        var result = await _apiClient.SendPassportDataAsync(passportData);
+
+        Assert.False(result);
+        _mockMessageBoxService.Verify(
+            x => x.ShowWarning(It.IsAny<string>(), "Таймаут запроса"),
+            Times.Once);
     }
 
     [Fact]
-    public async Task SendPassportDataAsync_UnexpectedException_Throws()
+    public async Task SendPassportDataAsync_UnexpectedException_ReturnsFalseAndShowsErrorMessage()
     {
         var passportData = new PassportData
         {
@@ -135,7 +158,11 @@ public class ApiClientTests
                 ItExpr.IsAny<CancellationToken>())
             .ThrowsAsync(new Exception("Unexpected error"));
 
-        await Assert.ThrowsAsync<Exception>(
-            () => _apiClient.SendPassportDataAsync(passportData));
+        var result = await _apiClient.SendPassportDataAsync(passportData);
+
+        Assert.False(result);
+        _mockMessageBoxService.Verify(
+            x => x.ShowError(It.IsAny<string>(), "Неизвестная ошибка"),
+            Times.Once);
     }
 }

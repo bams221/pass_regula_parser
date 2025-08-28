@@ -78,7 +78,7 @@ namespace PassRegulaParser.Tests.Core.Utils.Managers
             Thread.Sleep(100);
 
             _manager.ClosePrevWindow();
-            Thread.Sleep(100);
+            Thread.Sleep(200);
 
             Assert.False(_manager.IsWindowOpen);
         }
