@@ -18,7 +18,7 @@ public class ApiClientTests
         _mockHandler = new Mock<HttpMessageHandler>();
         _httpClient = new HttpClient(_mockHandler.Object)
         {
-            BaseAddress = new Uri("http://localhost:80/")
+            BaseAddress = new Uri("http://localhost:5000/")
         };
         _apiClient = new ApiClient();
         // Replace the default HttpClient with our mocked one

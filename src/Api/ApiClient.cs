@@ -8,7 +8,7 @@ namespace PassRegulaParser.Api;
 public class ApiClient
 {
     private readonly HttpClient _httpClient;
-    private const string ApiUrl = "http://localhost:80/add_passport";
+    private const string ApiUrl = "http://localhost:5000/add_passport";
 
     public ApiClient()
     {
@@ -32,17 +32,15 @@ public class ApiClient
 
             var response = await _httpClient.PostAsync(ApiUrl, content);
 
-            if (response.IsSuccessStatusCode)
-            {
-                Console.WriteLine("Data sent successfully!");
-                return true;
-            }
-            else
+            Console.WriteLine($"Data sent. Response status: {response.StatusCode}");
+
+            if (!response.IsSuccessStatusCode)
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"Error: {response.StatusCode}, Details: {errorContent}");
                 return false;
             }
+            return true;
         }
         catch (HttpRequestException ex)
         {
