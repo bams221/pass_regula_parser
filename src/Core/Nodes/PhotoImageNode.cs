@@ -10,9 +10,10 @@ class PhotoImageNode(string photoFilepath) : INodeElement
 
     public PassportData Process(PassportData passportData)
     {
+        PassportData newPassportData = passportData.Clone();
         string photoBase64 = PhotoUtils.GetPhotoBase64FromFile(_photoFilepath);
-        passportData.PhotoBase64 = photoBase64;
-        return passportData;
+        newPassportData.PhotoBase64 = photoBase64;
+        return newPassportData;
     }
 
 }

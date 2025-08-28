@@ -19,14 +19,14 @@ public class DoctypeDataParserNodeTests
     }
 
     [Fact]
-    public void Process_ShouldReturnSamePassportDataInstance()
+    public void Process_ShouldReturnNewPassportDataInstance()
     {
         var passportData = new PassportData();
         var node = new DoctypeDataParserNode(jsonFilePath);
 
         var result = node.Process(passportData);
 
-        Assert.Same(passportData, result);
+        Assert.NotSame(passportData, result);
     }
 
     [Fact]

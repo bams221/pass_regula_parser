@@ -10,8 +10,9 @@ public class DoctypeDataParserNode(string doctypeDataJsonFilepath) : INodeElemen
 
     public PassportData Process(PassportData passportData)
     {
+        PassportData newPassportData = passportData.Clone();
         string documentName = _jsonParser.GetPropertyString("OneCandidate.DocumentName");
-        passportData.DocumentType = documentName;
-        return passportData;
+        newPassportData.DocumentType = documentName;
+        return newPassportData;
     }
 }

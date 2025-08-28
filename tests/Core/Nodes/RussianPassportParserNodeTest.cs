@@ -27,14 +27,14 @@ public class RussianPassportParserNodeTests
     }
 
     [Fact]
-    public void Process_ShouldReturnSamePassportDataInstance()
+    public void Process_ShouldReturnNewPassportDataInstance()
     {
         var passportData = new PassportData();
         var node = new RussianPassportParserNode(textDataFilepath);
 
         var result = node.Process(passportData);
 
-        Assert.Same(passportData, result);
+        Assert.NotSame(passportData, result);
     }
 
     [Fact]

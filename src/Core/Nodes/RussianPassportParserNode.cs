@@ -11,6 +11,7 @@ public class RussianPassportParserNode(string doctypeDataJsonFilepath) : INodeEl
 
     public PassportData Process(PassportData passportData)
     {
+        PassportData newPassportData = passportData.Clone();
         FieldList fieldList = new(
             fieldArray: _jsonParser.GetPropertyArray(FieldListPath),
             valuePropertyName: "value",
@@ -19,18 +20,18 @@ public class RussianPassportParserNode(string doctypeDataJsonFilepath) : INodeEl
             language: "Russian"
         );
 
-        passportData.Serial = fieldList.GetValue("Document Series");
-        passportData.Number = fieldList.GetValue("Booklet Number");
-        passportData.BirthDate = fieldList.GetValue("Date of Birth");
-        passportData.FullName = fieldList.GetValueRussian("Surname And Given Names");
-        passportData.Gender = fieldList.GetValueRussian("Sex");
+        newPassportData.Serial = fieldList.GetValue("Document Series");
+        newPassportData.Number = fieldList.GetValue("Booklet Number");
+        newPassportData.BirthDate = fieldList.GetValue("Date of Birth");
+        newPassportData.FullName = fieldList.GetValueRussian("Surname And Given Names");
+        newPassportData.Gender = fieldList.GetValueRussian("Sex");
         string birthCity = fieldList.GetValueRussian("Place of Birth");
-        passportData.BirthCity = StringUtils.ReplaceSpecialChars(birthCity);
+        newPassportData.BirthCity = StringUtils.ReplaceSpecialChars(birthCity);
 
         string authority = fieldList.GetValueRussian("Authority");
-        passportData.Authority = StringUtils.ReplaceSpecialChars(authority);
-        passportData.AuthorityCode = fieldList.GetValue("Authority Code");
-        passportData.IssueDate = fieldList.GetValue("Date of Issue");
-        return passportData;
+        newPassportData.Authority = StringUtils.ReplaceSpecialChars(authority);
+        newPassportData.AuthorityCode = fieldList.GetValue("Authority Code");
+        newPassportData.IssueDate = fieldList.GetValue("Date of Issue");
+        return newPassportData;
     }
 }

@@ -13,6 +13,29 @@ public class PassportData : DocumentData
     public string? AuthorityCode { get; set; }
     public string? PhotoBase64 { get; set; }
 
+    public PassportData Clone()
+    {
+        return new PassportData
+        {
+            DocumentType = DocumentType,
+            Description = Description,
+            DataSaveAgreement = DataSaveAgreement,
+            DataSaveAgreementDateEnd = DataSaveAgreementDateEnd,
+
+            FullName = FullName,
+            Serial = Serial,
+            Number = Number,
+            BirthCity = BirthCity,
+            BirthDate = BirthDate,
+            Gender = Gender,
+            IssueDate = IssueDate,
+            Authority = Authority,
+            AuthorityCode = AuthorityCode,
+            PhotoBase64 = PhotoBase64
+        };
+    }
+
+
     public override string ToString() =>
     base.ToString() +
     $@"
