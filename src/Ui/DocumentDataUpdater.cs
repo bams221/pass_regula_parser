@@ -15,7 +15,7 @@ public class DocumentDataUpdater(PassportData documentData)
             {
                 TextBox textBox => textBox.Text,
                 Label label => label.Text,
-                CheckBox checkBox => checkBox.Checked.ToString(),
+                CheckBox checkBox => checkBox.Checked ? "1" : "0",
                 _ => null
             };
 

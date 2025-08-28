@@ -4,7 +4,7 @@ public abstract class DocumentData
 {
     public string? DocumentType { get; set; }
     public string? Description { get; set; }
-    public string DataSaveAgreement { get; set; } = "False";
+    public string DataSaveAgreement { get; set; } = "0";
     public string DataSaveAgreementDateEnd { get; set; }
 
     protected DocumentData()
