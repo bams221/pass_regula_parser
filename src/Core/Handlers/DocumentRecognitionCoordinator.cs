@@ -37,16 +37,19 @@ public class DocumentRecognitionCoordinator(string dirPath)
 
         string doctypeDataFilepath = Path.Combine(_dirPath, "ChoosenDoctype_Data.json");
         DoctypeDataParserNode doctypeDataParserNode = new(doctypeDataFilepath);
-        
+
         string textDataFilepath = Path.Combine(_dirPath, "Text_Data.json");
         RussianPassportParserNode rusPasspParserNode = new(textDataFilepath);
 
         string photoFilepath = Path.Combine(_dirPath, "Photo.jpg");
         PhotoImageNode photoImageNode = new(photoFilepath);
 
+        CorrectorNode correctorNode = new();
+
         passportData = doctypeDataParserNode.Process(passportData);
         passportData = rusPasspParserNode.Process(passportData);
         passportData = photoImageNode.Process(passportData);
+        passportData = correctorNode.Process(passportData);
 
         Console.WriteLine("Passport data recognized!");
         return passportData;
