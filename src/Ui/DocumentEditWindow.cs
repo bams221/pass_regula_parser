@@ -32,13 +32,16 @@ public class DocumentEditWindow : Form
         TopMost = true;
     }
 
-    public async void SaveAndClose()
+    public async Task SendDataAndCloseIfSuccess()
     {
         _dataUpdater.UpdateFromControls(_formBuilder.FieldControls);
         // DocumentDataSaver.SaveToJson(_documentData);
-        await _apiService.SendPassportDataAsync(_documentData);
-        DialogResult = DialogResult.OK;
-        Close();
+        var success = await _apiService.SendPassportDataAsync(_documentData);
+        if (success)
+        {
+            DialogResult = DialogResult.OK;
+            Close();
+        }
     }
 
     public PassportData GetDocumentData() => _documentData;

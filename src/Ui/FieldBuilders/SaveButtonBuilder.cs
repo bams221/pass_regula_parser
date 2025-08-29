@@ -19,7 +19,14 @@ public class SaveButtonBuilder(TableLayoutPanel mainPanel, DocumentEditWindow wi
             Margin = new Padding(0, 10, 0, 0)
         };
 
-        saveButton.Click += (sender, e) => _window.SaveAndClose();
+        saveButton.Click += async (sender, e) =>
+        {
+            saveButton.Enabled = false;
+            saveButton.Text = "Отправка...";
+            await _window.SendDataAndCloseIfSuccess();
+            saveButton.Text = "Отправить";
+            saveButton.Enabled = true; 
+        };
 
         _mainPanel.SetColumnSpan(saveButton, 2);
         _mainPanel.Controls.Add(saveButton, 0, rowIndex);
