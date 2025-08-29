@@ -35,7 +35,6 @@ public class DocumentEditWindow : Form
     public async Task SendDataAndCloseIfSuccess()
     {
         _dataUpdater.UpdateFromControls(_formBuilder.FieldControls);
-        // DocumentDataSaver.SaveToJson(_documentData);
         var success = await _apiService.SendPassportDataAsync(_documentData);
         if (success)
         {
