@@ -1,7 +1,7 @@
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using Microsoft.Extensions.Configuration;
+using PassRegulaParser.Config;
 using PassRegulaParser.Core.Interfaces;
 using PassRegulaParser.Models;
 using PassRegulaParser.Ui.Services;
@@ -21,14 +21,9 @@ public class ApiClient
         _httpClient = httpClient;
         _messageBoxService = messageBoxService;
 
-        var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .Build();
-
-        _apiUrl = configuration["ApiSettings:ApiUrl"] ??
-            throw new InvalidOperationException("В конфигурационном файле appsettings.json не найден адрес API (ApiSettings:ApiUrl).");
-
+        _apiUrl = AppConfiguration.Configuration["ApiSettings:ApiUrl"]
+            ?? throw new InvalidOperationException("В конфигурационном файле appsettings.json не найден адрес API (ApiSettings:ApiUrl).");
+        
         _httpClient.DefaultRequestHeaders.Accept.Add(
             new MediaTypeWithQualityHeaderValue("application/json"));
     }
