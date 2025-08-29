@@ -14,9 +14,7 @@ public class ApiClient
     private readonly IMessageBoxService _messageBoxService;
     private readonly string _apiUrl;
 
-    public ApiClient() : this(new HttpClient(), new MessageBoxService())
-    {
-    }
+    public ApiClient() : this(new HttpClient(), new MessageBoxService()) {}
 
     internal ApiClient(HttpClient httpClient, IMessageBoxService messageBoxService)
     {
