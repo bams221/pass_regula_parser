@@ -21,6 +21,7 @@ public class DirWatcherService
     public void Start()
     {
         Watcher.EnableRaisingEvents = true;
+        Console.WriteLine("Watcher service started!");
         while (Console.Read() != 'q') ;
     }
 }

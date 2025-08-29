@@ -13,7 +13,7 @@ public class SaveButtonBuilder(TableLayoutPanel mainPanel, DocumentEditWindow wi
 
         var saveButton = new Button
         {
-            Text = "Сохранить",
+            Text = "Отправить",
             Dock = DockStyle.Fill,
             Height = 40,
             Margin = new Padding(0, 10, 0, 0)

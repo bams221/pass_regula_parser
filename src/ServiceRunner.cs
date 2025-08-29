@@ -16,8 +16,6 @@ class ServiceRunner
             FileFilter,
             newRecognitionHandler.OnChangeDetected);
 
-        Console.WriteLine("Watcher service started!");
-
         watcher.Start();
     }
 }
