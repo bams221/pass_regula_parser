@@ -9,13 +9,16 @@ public class EditableField
     private readonly DocumentEditWindow _window;
     private readonly Dictionary<string, Control> _fieldControls;
 
+    private readonly int? _maxLength;
+
     public EditableField(
         TableLayoutPanel panel,
         string labelText,
         string propertyName,
         Func<string, bool> validator,
         DocumentEditWindow window,
-        Dictionary<string, Control> fieldControls)
+        Dictionary<string, Control> fieldControls,
+        int? maxLength = null)
     {
         _panel = panel;
         _labelText = labelText;
@@ -23,6 +26,7 @@ public class EditableField
         _validator = validator;
         _window = window;
         _fieldControls = fieldControls;
+        _maxLength = maxLength;
     }
 
     public void AddToPanel()
@@ -44,7 +48,8 @@ public class EditableField
         {
             Text = propertyValue,
             Dock = DockStyle.Fill,
-            Margin = new Padding(0, 5, 0, 5)
+            Margin = new Padding(0, 5, 0, 5),
+            MaxLength = _maxLength ?? 32767
         };
 
         UpdateBackground(textBox, propertyValue);

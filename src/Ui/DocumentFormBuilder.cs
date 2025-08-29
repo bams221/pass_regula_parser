@@ -41,12 +41,12 @@ public class DocumentFormBuilder(DocumentEditWindow window)
 
         new EditableField(
             _mainPanel, "Серия:", nameof(PassportData.Serial),
-            FieldValidators.OnlyDigits, _window, FieldControls
+            FieldValidators.OnlyDigits, _window, FieldControls, 4
             ).AddToPanel();
 
         new EditableField(
             _mainPanel, "Номер:", nameof(PassportData.Number),
-            FieldValidators.OnlyDigits, _window, FieldControls
+            FieldValidators.OnlyDigits, _window, FieldControls, 6
             ).AddToPanel();
 
         new EditableField(
@@ -56,12 +56,12 @@ public class DocumentFormBuilder(DocumentEditWindow window)
 
         new EditableField(
             _mainPanel, "Дата рождения:", nameof(PassportData.BirthDate),
-            FieldValidators.IsDate, _window, FieldControls
+            FieldValidators.IsDate, _window, FieldControls, 10
             ).AddToPanel();
 
         new EditableField(
             _mainPanel, "Пол:", nameof(PassportData.Gender),
-            FieldValidators.OnlyWords, _window, FieldControls
+            FieldValidators.OnlyWords, _window, FieldControls, 1
             ).AddToPanel();
 
         new EditableField(
@@ -76,7 +76,7 @@ public class DocumentFormBuilder(DocumentEditWindow window)
 
         new EditableField(
             _mainPanel, "Код подразделения:", nameof(PassportData.AuthorityCode),
-            FieldValidators.NotEmpty, _window, FieldControls
+            FieldValidators.NotEmpty, _window, FieldControls, 7
             ).AddToPanel();
 
         photoBuilder.AddPhotoField();
