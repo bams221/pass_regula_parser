@@ -23,7 +23,7 @@ public class DocumentUiManager : IDisposable
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"UI Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Ошибка интерфейса: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
