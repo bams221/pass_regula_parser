@@ -1,6 +1,7 @@
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using Microsoft.Extensions.Configuration;
 using PassRegulaParser.Core.Interfaces;
 using PassRegulaParser.Models;
 using PassRegulaParser.Ui.Services;
@@ -11,7 +12,7 @@ public class ApiClient
 {
     private readonly HttpClient _httpClient;
     private readonly IMessageBoxService _messageBoxService;
-    private const string ApiUrl = "http://localhost:5000/add_passport";
+    private readonly string _apiUrl;
 
     public ApiClient() : this(new HttpClient(), new MessageBoxService())
     {
@@ -21,6 +22,15 @@ public class ApiClient
     {
         _httpClient = httpClient;
         _messageBoxService = messageBoxService;
+
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .Build();
+
+        _apiUrl = configuration["ApiSettings:ApiUrl"] ??
+            throw new InvalidOperationException("ApiSettings:ApiUrl not found in appsettings.json config");
+
         _httpClient.DefaultRequestHeaders.Accept.Add(
             new MediaTypeWithQualityHeaderValue("application/json"));
     }
@@ -38,7 +48,7 @@ public class ApiClient
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync(ApiUrl, content);
+            var response = await _httpClient.PostAsync(_apiUrl, content);
 
             Console.WriteLine($"Data sent. Response status: {response.StatusCode}");
 

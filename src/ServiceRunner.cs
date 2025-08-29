@@ -1,19 +1,24 @@
 ﻿using PassRegulaParser.Core.Services;
 using PassRegulaParser.Core.Handlers;
+using Microsoft.Extensions.Configuration;
 
 namespace PassRegulaParser;
 
 class ServiceRunner
 {
-    private const string PathToWatch = "C:\\RD\\last_res";
-    private const string FileFilter = "ChoosenDoctype_Data.json";
-
     public static void Main(string[] args)
     {
-        DocumentRecognitionCoordinator newRecognitionHandler = new(PathToWatch);
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .Build();
+        string pathToWatch = configuration["PathToWatch"] ?? throw new FormatException("PathToWatch is missing in appsettings.json config file");
+        string fileFilter = configuration["FileFilter"] ?? throw new FormatException("FileFilter is missing in appsettings.json config file");
+        
+        DocumentRecognitionCoordinator newRecognitionHandler = new(pathToWatch);
         DirWatcherService watcher = new(
-            PathToWatch,
-            FileFilter,
+            pathToWatch,
+            fileFilter,
             newRecognitionHandler.OnChangeDetected);
 
         watcher.Start();
