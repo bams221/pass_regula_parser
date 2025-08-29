@@ -14,7 +14,7 @@ public class ApiClient
     private readonly IMessageBoxService _messageBoxService;
     private readonly string _apiUrl;
 
-    public ApiClient() : this(new HttpClient(), new MessageBoxService()) {}
+    public ApiClient() : this(new HttpClient(), new MessageBoxService()) { }
 
     internal ApiClient(HttpClient httpClient, IMessageBoxService messageBoxService)
     {
@@ -44,21 +44,51 @@ public class ApiClient
             var response = await _httpClient.PostAsync(_apiUrl, content);
             Console.WriteLine($"Данные отправлены. Статус ответа: {response.StatusCode}");
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode) return true;
+
+            var errorContent = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode == System.Net.HttpStatusCode.UnprocessableEntity)
             {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                string errorMessage = $"Статус: {response.StatusCode}\n" +
-                                      $"Подробности: {(!string.IsNullOrEmpty(errorContent) ? errorContent : "нет дополнительной информации")}";
-                _messageBoxService.ShowError(errorMessage, "Ошибка при отправке данных");
+
+                try
+                {
+                    using JsonDocument doc = JsonDocument.Parse(errorContent);
+                    var errors = doc.RootElement.GetProperty("detail").EnumerateArray();
+                    var errorMessages = new List<string>();
+
+                    foreach (var error in errors)
+                    {
+                        string msg = error.GetProperty("msg").GetString() ?? "";
+                        errorMessages.Add(msg);
+                    }
+
+                    string errorMessage = $"Ошибка валидации данных паспорта:\n\n" +
+                                          $"{string.Join("\n", errorMessages)}\n\n" +
+                                          $"Проверьте корректность введённых данных и повторите попытку.";
+                    _messageBoxService.ShowError(errorMessage, "Ошибка валидации данных");
+                }
+                catch (Exception)
+                {
+                    string errorMessage = $"Ошибка валидации данных паспорта.\n" +
+                                          $"Проверьте корректность введённых данных и повторите попытку.\n\n" +
+                                          $"Детали ошибки: {(!string.IsNullOrEmpty(errorContent) ? errorContent : "нет дополнительной информации")}";
+                    _messageBoxService.ShowError(errorMessage, "Ошибка валидации данных");
+                }
+
                 return false;
             }
-
-            return true;
+            else
+            {
+                string errorMessage = $"Сервер вернул ошибку: {response.StatusCode}\n" +
+                              $"Подробности: {(!string.IsNullOrEmpty(errorContent) ? errorContent : "нет дополнительной информации")}\n\n" +
+                              $"Попробуйте повторить попытку позже или обратитесь к администратору.";
+                _messageBoxService.ShowError(errorMessage, "Ошибка сервера");
+                return false;
+            }
         }
         catch (HttpRequestException ex)
         {
             string errorMessage = $"Не удалось отправить данные на сервер.\n" +
-                                  $"Проверьте подключение к интернету и повторите попытку.\n\n" +
                                   $"Детали ошибки: {ex.Message}";
             if (ex.InnerException != null)
             {
@@ -88,10 +118,7 @@ public class ApiClient
             string errorMessage = $"Произошла неожиданная ошибка при отправке данных.\n" +
                                   $"Попробуйте повторить попытку позже или обратитесь к администратору.\n\n" +
                                   $"Детали ошибки: {ex.Message}";
-            if (ex.InnerException != null)
-            {
-                errorMessage += $"\nВнутренняя ошибка: {ex.InnerException.Message}";
-            }
+            
             _messageBoxService.ShowError(errorMessage, "Неизвестная ошибка");
             return false;
         }
