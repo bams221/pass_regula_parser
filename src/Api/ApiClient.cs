@@ -14,7 +14,14 @@ public class ApiClient
     private readonly ApiErrorHandler _errorHandler;
     private readonly string _apiUrl;
 
-    public ApiClient() : this(new HttpClient(), new MessageBoxService()) { }
+    public ApiClient() : this(
+        new HttpClient(new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback =
+                HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        }),
+        new MessageBoxService())
+    { }
 
     protected ApiClient(HttpClient httpClient, IMessageBoxService messageBoxService)
     {
