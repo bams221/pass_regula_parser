@@ -82,7 +82,7 @@ public class DocumentFormBuilder(DocumentEditWindow window)
         photoBuilder.AddPhotoField();
         
         new EditableMultilineField(
-            _mainPanel, "Описание:", nameof(PassportData.Description),
+            _mainPanel, "Комментарий:", nameof(PassportData.Description),
             FieldValidators.Any, _window, FieldControls
             ).AddToPanel();
 

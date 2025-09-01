@@ -41,7 +41,7 @@ public class AgreementFieldBuilder
 
         var daysLabel = new Label
         {
-            Text = "Срок хранения:",
+            Text = "Срок хранения до:",
             Dock = DockStyle.Fill,
             TextAlign = ContentAlignment.MiddleLeft,
             Margin = new Padding(0, 5, 10, 5)
