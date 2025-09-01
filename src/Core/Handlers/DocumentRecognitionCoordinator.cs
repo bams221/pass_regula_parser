@@ -45,11 +45,13 @@ public class DocumentRecognitionCoordinator(string dirPath)
         PhotoImageNode photoImageNode = new(photoFilepath);
 
         CorrectorNode correctorNode = new();
+        UsernameNode usernameNode = new();
 
         passportData = doctypeDataParserNode.Process(passportData);
         passportData = rusPasspParserNode.Process(passportData);
         passportData = photoImageNode.Process(passportData);
         passportData = correctorNode.Process(passportData);
+        passportData = usernameNode.Process(passportData);
 
         Console.WriteLine("Passport data recognized!");
         return passportData;

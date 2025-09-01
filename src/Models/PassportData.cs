@@ -21,6 +21,7 @@ public class PassportData : DocumentData
             Description = Description,
             DataSaveAgreement = DataSaveAgreement,
             DataSaveAgreementDateEnd = DataSaveAgreementDateEnd,
+            Username = Username,
 
             FullName = FullName,
             Serial = Serial,

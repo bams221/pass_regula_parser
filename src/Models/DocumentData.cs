@@ -6,6 +6,7 @@ public abstract class DocumentData
     public string? Description { get; set; }
     public string DataSaveAgreement { get; set; } = "0";
     public string DataSaveAgreementDateEnd { get; set; }
+    public string? Username { get; set; }
 
     protected DocumentData()
     {
@@ -16,5 +17,6 @@ public abstract class DocumentData
    $@"Document Type: {DocumentType}
     DataSaveAgreement: {DataSaveAgreement}
     DataSaveAgreementDateEnd: {DataSaveAgreementDateEnd}
-    Description: {Description}";
+    Description: {Description}
+    Username: {Username}";
 }
