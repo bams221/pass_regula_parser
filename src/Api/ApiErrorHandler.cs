@@ -10,7 +10,7 @@ public class ApiErrorHandler(IMessageBoxService messageBoxService)
 
     public bool HandleError(
         HttpResponseMessage response,
-        string errorContent,
+        string errorMessage,
         Exception? exception = null)
     {
         if (response.IsSuccessStatusCode)
@@ -18,11 +18,11 @@ public class ApiErrorHandler(IMessageBoxService messageBoxService)
 
         if (response.StatusCode == HttpStatusCode.UnprocessableEntity)
         {
-            HandleValidationError(errorContent);
+            HandleValidationError(errorMessage);
         }
         else
         {
-            HandleServerErrorAsync(response.StatusCode, errorContent);
+            HandleServerError(response.StatusCode, errorMessage);
         }
 
         return false;
@@ -33,25 +33,25 @@ public class ApiErrorHandler(IMessageBoxService messageBoxService)
         switch (ex)
         {
             case HttpRequestException httpEx:
-                HandleHttpRequestErrorAsync(httpEx);
+                HandleHttpRequestError(httpEx);
                 break;
             case TaskCanceledException timeoutEx:
-                HandleTimeoutErrorAsync(timeoutEx);
+                HandleTimeoutError(timeoutEx);
                 break;
             case JsonException jsonEx:
-                HandleJsonErrorAsync(jsonEx);
+                HandleJsonError(jsonEx);
                 break;
             default:
-                HandleUnexpectedErrorAsync(ex);
+                HandleUnexpectedError(ex);
                 break;
         }
     }
 
-    private void HandleValidationError(string errorContent)
+    private void HandleValidationError(string errorMessage)
     {
         try
         {
-            using JsonDocument doc = JsonDocument.Parse(errorContent);
+            using JsonDocument doc = JsonDocument.Parse(errorMessage);
             var errors = doc.RootElement.GetProperty("detail").EnumerateArray();
             var errorMessages = new List<string>();
             foreach (var error in errors)
@@ -59,36 +59,36 @@ public class ApiErrorHandler(IMessageBoxService messageBoxService)
                 string msg = error.GetProperty("msg").GetString() ?? "";
                 errorMessages.Add(msg);
             }
-            string errorMessage = $"Ошибка валидации данных паспорта:\n\n" +
+            string errorMessageExplained = $"Ошибка валидации данных паспорта:\n\n" +
                                   $"{string.Join("\n", errorMessages)}\n\n" +
                                   $"Проверьте корректность введённых данных и повторите попытку.";
-            _messageBoxService.ShowError(errorMessage, "Ошибка валидации данных");
+            _messageBoxService.ShowError(errorMessageExplained, "Ошибка валидации данных");
         }
         catch (Exception)
         {
-            string errorMessage = $"Ошибка валидации данных паспорта.\n" +
+            string errorMessageExplained = $"Ошибка валидации данных паспорта.\n" +
                                   $"Проверьте корректность введённых данных и повторите попытку.\n\n" +
-                                  $"Детали ошибки: {(!string.IsNullOrEmpty(errorContent) ? errorContent : "нет дополнительной информации")}";
-            _messageBoxService.ShowError(errorMessage, "Ошибка валидации данных");
+                                  $"Детали ошибки: {(!string.IsNullOrEmpty(errorMessage) ? errorMessage : "нет дополнительной информации")}";
+            _messageBoxService.ShowError(errorMessageExplained, "Ошибка валидации данных");
         }
     }
 
-    private void HandleServerErrorAsync(HttpStatusCode statusCode, string errorContent)
+    private void HandleServerError(HttpStatusCode statusCode, string errorMessage)
     {
-        string errorMessage = $"Сервер вернул ошибку: {statusCode}\n" +
-                              $"Подробности: {(!string.IsNullOrEmpty(errorContent) ? errorContent : "нет дополнительной информации")}\n\n" +
+        string errorMessageExplained = $"Сервер вернул ошибку: {statusCode}\n" +
+                              $"Подробности: {(!string.IsNullOrEmpty(errorMessage) ? errorMessage : "нет дополнительной информации")}\n\n" +
                               $"Попробуйте повторить попытку позже или обратитесь к администратору.";
-        _messageBoxService.ShowError(errorMessage, "Ошибка сервера");
+        _messageBoxService.ShowError(errorMessageExplained, "Ошибка сервера");
     }
 
-    private void HandleHttpRequestErrorAsync(HttpRequestException ex)
+    private void HandleHttpRequestError(HttpRequestException ex)
     {
         string errorMessage = $"Не удалось отправить данные на сервер.\n" +
                               $"Детали ошибки: {ex.Message}";
         _messageBoxService.ShowError(errorMessage, "Ошибка сети");
     }
 
-    private void HandleTimeoutErrorAsync(TaskCanceledException ex)
+    private void HandleTimeoutError(TaskCanceledException ex)
     {
         string errorMessage = $"Превышено время ожидания ответа от сервера.\n" +
                               $"Попробуйте повторить попытку позже или проверьте стабильность соединения.\n\n" +
@@ -96,7 +96,7 @@ public class ApiErrorHandler(IMessageBoxService messageBoxService)
         _messageBoxService.ShowWarning(errorMessage, "Таймаут запроса");
     }
 
-    private void HandleJsonErrorAsync(JsonException ex)
+    private void HandleJsonError(JsonException ex)
     {
         string errorMessage = $"Ошибка при обработке данных паспорта.\n" +
                               $"Проверьте корректность введённых данных и повторите попытку.\n\n" +
@@ -104,7 +104,7 @@ public class ApiErrorHandler(IMessageBoxService messageBoxService)
         _messageBoxService.ShowError(errorMessage, "Ошибка данных");
     }
 
-    private void HandleUnexpectedErrorAsync(Exception ex)
+    private void HandleUnexpectedError(Exception ex)
     {
         string errorMessage = $"Произошла неожиданная ошибка при отправке данных.\n" +
                               $"Попробуйте повторить попытку позже или обратитесь к администратору.\n\n" +
