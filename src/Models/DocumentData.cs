@@ -10,7 +10,7 @@ public abstract class DocumentData
 
     protected DocumentData()
     {
-        DataSaveAgreementDateEnd = DateTime.Today.AddYears(1).ToString("dd.MM.yyyy");
+        DataSaveAgreementDateEnd = DateTime.Today.ToString("dd.MM.yyyy");
     }
 
     public override string ToString() =>
