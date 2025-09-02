@@ -30,6 +30,7 @@ public class DocumentEditWindow : Form
         MaximizeBox = true;
         StartPosition = FormStartPosition.CenterScreen;
         TopMost = true;
+        ShowInTaskbar = true;
     }
 
     public async Task SendDataAndCloseIfSuccess()
@@ -55,5 +56,27 @@ public class DocumentEditWindow : Form
     {
         var value = GetPropertyValue(propertyName);
         return value is T typedValue ? typedValue : default;
+    }
+
+    protected override void OnDeactivate(EventArgs e)
+    {
+        base.OnDeactivate(e);
+        TopMost = true;
+        Activate();
+    }
+
+    protected override void WndProc(ref Message m)
+    {
+        const int WM_ACTIVATEAPP = 0x001C;
+        
+        if (m.Msg == WM_ACTIVATEAPP)
+        {
+            if (m.WParam != IntPtr.Zero)
+            {
+                TopMost = true;
+            }
+        }
+        
+        base.WndProc(ref m);
     }
 }
