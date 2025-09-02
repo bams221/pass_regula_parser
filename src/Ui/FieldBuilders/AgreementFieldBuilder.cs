@@ -9,6 +9,14 @@ public class AgreementFieldBuilder
     private readonly DocumentEditWindow _window;
     private readonly Dictionary<string, Control> _fieldControls;
 
+
+    private const int DateMaxLength = 10; // ДД.ММ.ГГГГ
+    private const int TextBoxWidth = 200;
+    private const int DefaultPadding = 5;
+
+    private static readonly string[] PeriodOptions = ["1 день", "1 месяц", "1 год", "10 лет"];
+
+
     public AgreementFieldBuilder(
         TableLayoutPanel mainPanel,
         DocumentEditWindow window,
@@ -25,14 +33,7 @@ public class AgreementFieldBuilder
         _mainPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         _mainPanel.RowCount++;
 
-        var agreementCheckBox = new CheckBox
-        {
-            Text = "Даю согласие на обработку и хранение персональных данных",
-            Dock = DockStyle.Fill,
-            Margin = new Padding(0, 5, 0, 5),
-            AutoSize = true,
-            Checked = true
-        };
+        var agreementCheckBox = CreateAgreementCheckBox("Даю согласие на обработку и хранение персональных данных");
         _mainPanel.SetColumnSpan(agreementCheckBox, 2);
         _mainPanel.Controls.Add(agreementCheckBox, 0, rowIndex);
 
@@ -53,14 +54,14 @@ public class AgreementFieldBuilder
             Text = "Срок хранения до:",
             Dock = DockStyle.Fill,
             TextAlign = ContentAlignment.MiddleLeft,
-            Margin = new Padding(0, 5, 10, 5)
+            Margin = new Padding(0, DefaultPadding, 10, DefaultPadding)
         };
 
         var daysTextBox = new TextBox
         {
             Text = _window.GetPropertyValue(nameof(PassportData.DataSaveAgreementDateEnd))?.ToString() ?? "",
             Width = 200,
-            Margin = new Padding(0, 5, 0, 5),
+            Margin = new Padding(0, DefaultPadding, 0, DefaultPadding),
             MaxLength = 10 // ДД.ММ.ГГГГ = 10
         };
 
@@ -86,12 +87,12 @@ public class AgreementFieldBuilder
         ComboBox periodComboBox = new()
         {
             Dock = DockStyle.Fill,
-            Margin = new Padding(0, 5, 0, 5),
+            Margin = new Padding(0, DefaultPadding, 0, DefaultPadding),
             DropDownStyle = ComboBoxStyle.DropDownList,
             SelectedItem = "1 день",
         };
 
-        periodComboBox.Items.AddRange(["1 день", "1 месяц", "1 год", "10 лет"]);
+        periodComboBox.Items.AddRange(PeriodOptions);
         periodComboBox.SelectedIndex = 0;
         periodComboBox.SelectedIndexChanged += (sender, e) =>
         {
@@ -110,21 +111,28 @@ public class AgreementFieldBuilder
         _fieldControls.Add(nameof(PassportData.DataSaveAgreementDateEnd), daysTextBox);
     }
 
+    private CheckBox CreateAgreementCheckBox(string text)
+    {
+        return new CheckBox
+        {
+            Text = text,
+            Dock = DockStyle.Fill,
+            Margin = new Padding(0, DefaultPadding, 0, DefaultPadding),
+            AutoSize = true,
+            Checked = true
+        };
+    }
+
     private static DateTime CalculateEndDate(string period)
     {
         DateTime today = DateTime.Today;
-        switch (period)
+        return period switch
         {
-            case "1 день":
-                return today;
-            case "1 месяц":
-                return today.AddMonths(1);
-            case "1 год":
-                return today.AddYears(1);
-            case "10 лет":
-                return today.AddYears(10);
-            default:
-                return today;
-        }
+            "1 день" => today,
+            "1 месяц" => today.AddMonths(1),
+            "1 год" => today.AddYears(1),
+            "10 лет" => today.AddYears(10),
+            _ => today,
+        };
     }
 }
