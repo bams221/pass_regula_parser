@@ -30,7 +30,8 @@ public class AgreementFieldBuilder
             Text = "Даю согласие на обработку и хранение персональных данных",
             Dock = DockStyle.Fill,
             Margin = new Padding(0, 5, 0, 5),
-            AutoSize = true
+            AutoSize = true,
+            Checked = true
         };
         _mainPanel.SetColumnSpan(agreementCheckBox, 2);
         _mainPanel.Controls.Add(agreementCheckBox, 0, rowIndex);
@@ -78,14 +79,6 @@ public class AgreementFieldBuilder
         _mainPanel.Controls.Add(daysLabel, 0, daysRowIndex);
         _mainPanel.Controls.Add(daysTextBox, 1, daysRowIndex);
 
-        daysTextBox.Visible = agreementCheckBox.Checked;
-        daysLabel.Visible = agreementCheckBox.Checked;
-
-        agreementCheckBox.CheckedChanged += (sender, e) =>
-        {
-            daysTextBox.Visible = agreementCheckBox.Checked;
-            daysLabel.Visible = agreementCheckBox.Checked;
-        };
 
         _fieldControls.Add(nameof(PassportData.DataSaveAgreement), agreementCheckBox);
         _fieldControls.Add(nameof(PassportData.DataSaveAgreementDateEnd), daysTextBox);
