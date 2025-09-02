@@ -48,27 +48,10 @@ public class ApiClient
             var json = JsonSerializer.Serialize(passportData, _jsonOptions);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(_apiUrl, content);
+            Console.WriteLine($"Данные отправлены. Статус ответа: {response.StatusCode}");
 
-            Console.WriteLine($"Data sent. Response status: {response.StatusCode}");
             var errorContent = await response.Content.ReadAsStringAsync();
-
-            if (response.Content.Headers.ContentType?.MediaType == "application/json")
-            {
-                try
-                {
-                    var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(errorContent);
-                    string errorMessage = errorResponse?.Error ?? "Server did not send error message";
-                    return _errorHandler.HandleError(response, errorMessage);
-                }
-                catch (JsonException)
-                {
-                    return _errorHandler.HandleError(response, errorContent);
-                }
-            }
-            else
-            {
-                return _errorHandler.HandleError(response, errorContent);
-            }
+            return _errorHandler.HandleError(response, errorContent);
         }
         catch (Exception ex)
         {
