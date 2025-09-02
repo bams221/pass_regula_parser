@@ -13,6 +13,7 @@ public class ApiClient
     private readonly HttpClient _httpClient;
     private readonly ApiErrorHandler _errorHandler;
     private readonly string _apiUrl;
+    private readonly JsonSerializerOptions _jsonOptions;
 
     public ApiClient() : this(
         new HttpClient(new HttpClientHandler
@@ -32,21 +33,25 @@ public class ApiClient
 
         _httpClient.DefaultRequestHeaders.Accept.Add(
             new MediaTypeWithQualityHeaderValue("application/json"));
+
+        _jsonOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = true
+        };
     }
 
     public async Task<bool> SendPassportDataAsync(PassportData passportData)
     {
         try
         {
-            var options = new JsonSerializerOptions { WriteIndented = true };
-            var json = JsonSerializer.Serialize(passportData, options);
+            var json = JsonSerializer.Serialize(passportData, _jsonOptions);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(_apiUrl, content);
 
             Console.WriteLine($"Data sent. Response status: {response.StatusCode}");
             var errorContent = await response.Content.ReadAsStringAsync();
 
-            // Проверяем, является ли ответ JSON
             if (response.Content.Headers.ContentType?.MediaType == "application/json")
             {
                 try
