@@ -1,3 +1,5 @@
+using System.Text;
+using System.Text.RegularExpressions;
 using PassRegulaParser.Core.Interfaces;
 using PassRegulaParser.Models;
 
@@ -9,6 +11,8 @@ public class CorrectorNode() : INodeElement
     {
         PassportData newPassportData = passportData.Clone();
         newPassportData.Gender = CorrectGender(passportData.Gender);
+        newPassportData.Authority = CorrectText(passportData.Authority);
+        newPassportData.BirthCity = CorrectText(passportData.BirthCity);
 
         return newPassportData;
     }
@@ -18,16 +22,43 @@ public class CorrectorNode() : INodeElement
         if (string.IsNullOrEmpty(gender))
             return string.Empty;
 
-        return gender switch
+        return gender.First().ToString() switch
         {
-            "МУЖ" => "М",
-            "МУЖ." => "М",
-            "MУЖ" => "М",
+            "М" => "М",
             "M" => "М",
-            "ЖЕН" => "Ж",
-            "ЖЕН." => "Ж",
             "Ж" => "Ж",
+            "F" => "Ж",
             _ => string.Empty
         };
+    }
+
+    private static string CorrectText(string? text)
+    {
+        if (string.IsNullOrEmpty(text))
+            return "";
+
+        var allowedChars = new HashSet<char>(
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+            "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ" +
+            ".,;:'\"-() "
+        );
+
+        var correctedText = new StringBuilder();
+
+        foreach (char c in text)
+        {
+            if (allowedChars.Contains(c))
+            {
+                correctedText.Append(c);
+            }
+            else
+            {
+                correctedText.Append(' ');
+            }
+        }
+
+        string result = Regex.Replace(correctedText.ToString(), @"\s+", " ");
+
+        return result.Trim();
     }
 }
