@@ -16,7 +16,7 @@ class ServiceRunner
 
         
         DocumentRecognitionCoordinator newRecognitionHandler = new(pathToWatch);
-        DirWatcherService watcher = new(
+        DirWatcher watcher = new(
             pathToWatch,
             fileFilter,
             newRecognitionHandler.OnChangeDetected);
