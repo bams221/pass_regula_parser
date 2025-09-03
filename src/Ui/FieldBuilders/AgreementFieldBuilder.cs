@@ -1,5 +1,6 @@
 using PassRegulaParser.Core.Utils;
 using PassRegulaParser.Models;
+using PassRegulaParser.Ui.Utils;
 
 namespace PassRegulaParser.Ui.FieldBuilders;
 
@@ -8,7 +9,6 @@ public class AgreementFieldBuilder
     private readonly TableLayoutPanel _mainPanel;
     private readonly DocumentEditWindow _window;
     private readonly Dictionary<string, Control> _fieldControls;
-
 
     private const int DateMaxLength = 10; // ДД.ММ.ГГГГ
     private const int TextBoxWidth = 200;
@@ -29,77 +29,25 @@ public class AgreementFieldBuilder
 
     public void AddAgreementCheckboxAndDaysField()
     {
-        var rowIndex = _mainPanel.RowCount;
+        int rowIndex = _mainPanel.RowCount;
         _mainPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         _mainPanel.RowCount++;
 
-        var agreementCheckBox = CreateAgreementCheckBox("Даю согласие на обработку и хранение персональных данных");
+        CheckBox agreementCheckBox = CreateAgreementCheckBox("Даю согласие на обработку и хранение персональных данных");
         _mainPanel.SetColumnSpan(agreementCheckBox, 2);
         _mainPanel.Controls.Add(agreementCheckBox, 0, rowIndex);
 
-        var daysRowIndex = _mainPanel.RowCount;
+        int daysRowIndex = _mainPanel.RowCount;
         _mainPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         _mainPanel.RowCount++;
 
+        FlowLayoutPanel flowPanel = CreateFlowPanel();
 
-        var flowPanel = new FlowLayoutPanel
-        {
-            Dock = DockStyle.Fill,
-            AutoSize = true,
-            FlowDirection = FlowDirection.LeftToRight,
-        };
+        Label daysLabel = CreateDaysLabel("Срок хранения до:");
 
-        var daysLabel = new Label
-        {
-            Text = "Срок хранения до:",
-            Dock = DockStyle.Fill,
-            TextAlign = ContentAlignment.MiddleLeft,
-            Margin = new Padding(0, DefaultPadding, 10, DefaultPadding)
-        };
+        TextBox  daysTextBox = CreateDaysTextBox();
 
-        var daysTextBox = new TextBox
-        {
-            Text = _window.GetPropertyValue(nameof(PassportData.DataSaveAgreementDateEnd))?.ToString() ?? "",
-            Width = 200,
-            Margin = new Padding(0, DefaultPadding, 0, DefaultPadding),
-            MaxLength = 10 // ДД.ММ.ГГГГ = 10
-        };
-
-        daysTextBox.KeyPress += (sender, e) =>
-        {
-            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-        };
-
-        daysTextBox.TextChanged += (sender, e) =>
-        {
-            TextBox textBox = (TextBox)sender!;
-            string formattedText = DateFormatter.FormatDateText(textBox.Text);
-            if (textBox.Text != formattedText)
-            {
-                textBox.Text = formattedText;
-                textBox.SelectionStart = formattedText.Length;
-            }
-        };
-
-        ComboBox periodComboBox = new()
-        {
-            Dock = DockStyle.Fill,
-            Margin = new Padding(0, DefaultPadding, 0, DefaultPadding),
-            DropDownStyle = ComboBoxStyle.DropDownList,
-            SelectedItem = "1 день",
-        };
-
-        periodComboBox.Items.AddRange(PeriodOptions);
-        periodComboBox.SelectedIndex = 0;
-        periodComboBox.SelectedIndexChanged += (sender, e) =>
-        {
-            string selectedPeriod = periodComboBox.SelectedItem.ToString()!;
-            DateTime endDate = CalculateEndDate(selectedPeriod);
-            daysTextBox.Text = endDate.ToString("dd.MM.yyyy");
-        };
+        ComboBox periodComboBox = CreatePeriodComboBox(daysTextBox);
 
         flowPanel.Controls.Add(daysTextBox);
         flowPanel.Controls.Add(periodComboBox);
@@ -111,7 +59,7 @@ public class AgreementFieldBuilder
         _fieldControls.Add(nameof(PassportData.DataSaveAgreementDateEnd), daysTextBox);
     }
 
-    private CheckBox CreateAgreementCheckBox(string text)
+    private static CheckBox CreateAgreementCheckBox(string text)
     {
         return new CheckBox
         {
@@ -123,16 +71,73 @@ public class AgreementFieldBuilder
         };
     }
 
-    private static DateTime CalculateEndDate(string period)
+    private static FlowLayoutPanel CreateFlowPanel()
     {
-        DateTime today = DateTime.Today;
-        return period switch
+        return new FlowLayoutPanel
         {
-            "1 день" => today,
-            "1 месяц" => today.AddMonths(1),
-            "1 год" => today.AddYears(1),
-            "10 лет" => today.AddYears(10),
-            _ => today,
+            Dock = DockStyle.Fill,
+            AutoSize = true,
+            FlowDirection = FlowDirection.LeftToRight,
         };
+    }
+
+    private static Label CreateDaysLabel(string text)
+    {
+        return new Label
+        {
+            Text = text,
+            Dock = DockStyle.Fill,
+            TextAlign = ContentAlignment.MiddleLeft,
+            Margin = new Padding(0, DefaultPadding, DefaultPadding, DefaultPadding)
+        };
+    }
+
+    private TextBox CreateDaysTextBox()
+    {
+        TextBox textBox = new()
+        {
+            Text = _window.GetPropertyValue(nameof(PassportData.DataSaveAgreementDateEnd))?.ToString() ?? "",
+            Width = TextBoxWidth,
+            Margin = new Padding(0, DefaultPadding, 0, DefaultPadding),
+            MaxLength = DateMaxLength
+        };
+        textBox.KeyPress += (sender, e) =>
+        {
+            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        };
+        textBox.TextChanged += (sender, e) =>
+        {
+            TextBox tb = (TextBox)sender!;
+            string formattedText = DateFormatter.FormatDateText(tb.Text);
+            if (tb.Text != formattedText)
+            {
+                tb.Text = formattedText;
+                tb.SelectionStart = formattedText.Length;
+            }
+        };
+        return textBox;
+    }
+
+    private static ComboBox CreatePeriodComboBox(TextBox daysTextBox)
+    {
+        ComboBox comboBox = new()
+        {
+            Dock = DockStyle.Fill,
+            Margin = new Padding(0, DefaultPadding, 0, DefaultPadding),
+            DropDownStyle = ComboBoxStyle.DropDownList,
+            SelectedItem = PeriodOptions[0],
+        };
+        comboBox.Items.AddRange(PeriodOptions);
+        comboBox.SelectedIndex = 0;
+        comboBox.SelectedIndexChanged += (sender, e) =>
+        {
+            string selectedPeriod = comboBox.SelectedItem.ToString()!;
+            DateTime endDate = DateUtils.CalculateEndDate(selectedPeriod);
+            daysTextBox.Text = endDate.ToString("dd.MM.yyyy");
+        };
+        return comboBox;
     }
 }
