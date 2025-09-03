@@ -12,7 +12,7 @@ public class CorrectorNode() : INodeElement
         PassportData newPassportData = passportData.Clone();
         newPassportData.Gender = CorrectGender(passportData.Gender);
         newPassportData.Authority = CorrectText(passportData.Authority);
-        newPassportData.BirthCity = CorrectText(passportData.BirthCity);
+        newPassportData.BirthPlace = CorrectText(passportData.BirthPlace);
 
         return newPassportData;
     }

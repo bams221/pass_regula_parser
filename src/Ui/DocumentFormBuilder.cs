@@ -50,7 +50,7 @@ public class DocumentFormBuilder(DocumentEditWindow window)
             ).AddToPanel();
 
         new EditableField(
-            _mainPanel, "Место рождения:", nameof(PassportData.BirthCity),
+            _mainPanel, "Место рождения:", nameof(PassportData.BirthPlace),
             FieldValidators.NotEmpty, _window, FieldControls
             ).AddToPanel();
 
@@ -82,7 +82,7 @@ public class DocumentFormBuilder(DocumentEditWindow window)
         photoBuilder.AddPhotoField();
         
         new EditableMultilineField(
-            _mainPanel, "Комментарий:", nameof(PassportData.Description),
+            _mainPanel, "Комментарий:", nameof(PassportData.Note),
             FieldValidators.Any, _window, FieldControls
             ).AddToPanel();
 

@@ -5,7 +5,7 @@ public class PassportData : DocumentData
     public string? FullName { get; set; }
     public string? Serial { get; set; }
     public string? Number { get; set; }
-    public string? BirthCity { get; set; }
+    public string? BirthPlace { get; set; }
     public string? BirthDate { get; set; }
     public string? Gender { get; set; }
     public string? IssueDate { get; set; }
@@ -18,7 +18,7 @@ public class PassportData : DocumentData
         return new PassportData
         {
             DocumentType = DocumentType,
-            Description = Description,
+            Note = Note,
             DataSaveAgreement = DataSaveAgreement,
             DataSaveAgreementDateEnd = DataSaveAgreementDateEnd,
             Username = Username,
@@ -26,7 +26,7 @@ public class PassportData : DocumentData
             FullName = FullName,
             Serial = Serial,
             Number = Number,
-            BirthCity = BirthCity,
+            BirthPlace = BirthPlace,
             BirthDate = BirthDate,
             Gender = Gender,
             IssueDate = IssueDate,
@@ -43,7 +43,7 @@ public class PassportData : DocumentData
     Full Name: {FullName}
     Serial: {Serial}
     Number: {Number}
-    Birth City: {BirthCity}
+    Birth Place: {BirthPlace}
     Birth Date: {BirthDate}
     Gender: {Gender}
     Issue Date: {IssueDate}

@@ -49,7 +49,7 @@ public class CorrectorNodeTests
             FullName = "Иванов Иван Иванович",
             Serial = "45 01",
             Number = "123456",
-            BirthCity = "Москва",
+            BirthPlace = "Москва",
             Gender = "МУЖ"
         };
 
@@ -58,7 +58,7 @@ public class CorrectorNodeTests
         Assert.Equal(original.FullName, result.FullName);
         Assert.Equal(original.Serial, result.Serial);
         Assert.Equal(original.Number, result.Number);
-        Assert.Equal(original.BirthCity, result.BirthCity);
+        Assert.Equal(original.BirthPlace, result.BirthPlace);
 
         Assert.Equal("М", result.Gender);
     }
@@ -71,7 +71,7 @@ public class CorrectorNodeTests
             FullName = null,
             Serial = null,
             Number = null,
-            BirthCity = null,
+            BirthPlace = null,
             BirthDate = null,
             Gender = null,
             IssueDate = null,
@@ -85,11 +85,11 @@ public class CorrectorNodeTests
         Assert.Null(result.FullName);
         Assert.Null(result.Serial);
         Assert.Null(result.Number);
-        Assert.Null(result.BirthCity);
+        Assert.Equal("", result.BirthPlace);
         Assert.Null(result.BirthDate);
         Assert.Equal("", result.Gender);
         Assert.Null(result.IssueDate);
-        Assert.Null(result.Authority);
+        Assert.Equal("", result.Authority);
         Assert.Null(result.AuthorityCode);
         Assert.Null(result.PhotoBase64);
     }

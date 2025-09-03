@@ -3,7 +3,7 @@ namespace PassRegulaParser.Models;
 public abstract class DocumentData
 {
     public string? DocumentType { get; set; }
-    public string? Description { get; set; }
+    public string? Note { get; set; }
     public string DataSaveAgreement { get; set; } = "0";
     public string DataSaveAgreementDateEnd { get; set; }
     public string? Username { get; set; }
@@ -17,6 +17,6 @@ public abstract class DocumentData
    $@"Document Type: {DocumentType}
     DataSaveAgreement: {DataSaveAgreement}
     DataSaveAgreementDateEnd: {DataSaveAgreementDateEnd}
-    Description: {Description}
+    Note: {Note}
     Username: {Username}";
 }

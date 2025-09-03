@@ -10,13 +10,13 @@ public class PassportDataTests
         var original = new PassportData
         {
             DocumentType = "Passport",
-            Description = "Test passport",
+            Note = "Test passport",
             DataSaveAgreement = "1",
             DataSaveAgreementDateEnd = "12.31.2024",
             FullName = "Иванов Иван Иванович",
             Serial = "45 01",
             Number = "123456",
-            BirthCity = "Москва",
+            BirthPlace = "Москва",
             BirthDate = "01.01.1990",
             Gender = "М",
             IssueDate = "01.01.2020",
@@ -29,13 +29,13 @@ public class PassportDataTests
 
         Assert.NotSame(original, cloned);
         Assert.Equal(original.DocumentType, cloned.DocumentType);
-        Assert.Equal(original.Description, cloned.Description);
+        Assert.Equal(original.Note, cloned.Note);
         Assert.Equal(original.DataSaveAgreement, cloned.DataSaveAgreement);
         Assert.Equal(original.DataSaveAgreementDateEnd, cloned.DataSaveAgreementDateEnd);
         Assert.Equal(original.FullName, cloned.FullName);
         Assert.Equal(original.Serial, cloned.Serial);
         Assert.Equal(original.Number, cloned.Number);
-        Assert.Equal(original.BirthCity, cloned.BirthCity);
+        Assert.Equal(original.BirthPlace, cloned.BirthPlace);
         Assert.Equal(original.BirthDate, cloned.BirthDate);
         Assert.Equal(original.Gender, cloned.Gender);
         Assert.Equal(original.IssueDate, cloned.IssueDate);

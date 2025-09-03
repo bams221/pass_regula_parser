@@ -25,8 +25,8 @@ public class RussianPassportParserNode(string doctypeDataJsonFilepath) : INodeEl
         newPassportData.BirthDate = fieldList.GetValue("Date of Birth");
         newPassportData.FullName = fieldList.GetValueRussian("Surname And Given Names");
         newPassportData.Gender = fieldList.GetValueRussian("Sex");
-        string birthCity = fieldList.GetValueRussian("Place of Birth");
-        newPassportData.BirthCity = StringUtils.ReplaceSpecialChars(birthCity);
+        string birthPlace = fieldList.GetValueRussian("Place of Birth");
+        newPassportData.BirthPlace = StringUtils.ReplaceSpecialChars(birthPlace);
 
         string authority = fieldList.GetValueRussian("Authority");
         newPassportData.Authority = StringUtils.ReplaceSpecialChars(authority);

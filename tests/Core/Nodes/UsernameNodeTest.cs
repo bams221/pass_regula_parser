@@ -40,7 +40,7 @@ public class UsernameNodeTests
             FullName = "Иванов Иван Иванович",
             Serial = "45 01",
             Number = "123456",
-            BirthCity = "Москва",
+            BirthPlace = "Москва",
             Gender = "МУЖ"
         };
 
@@ -49,7 +49,7 @@ public class UsernameNodeTests
         Assert.Equal(original.FullName, result.FullName);
         Assert.Equal(original.Serial, result.Serial);
         Assert.Equal(original.Number, result.Number);
-        Assert.Equal(original.BirthCity, result.BirthCity);
+        Assert.Equal(original.BirthPlace, result.BirthPlace);
 
         Assert.Equal(Environment.UserName, result.Username);
     }
@@ -62,7 +62,7 @@ public class UsernameNodeTests
             FullName = null,
             Serial = null,
             Number = null,
-            BirthCity = null,
+            BirthPlace = null,
             BirthDate = null,
             Gender = null,
             IssueDate = null,
@@ -76,7 +76,7 @@ public class UsernameNodeTests
         Assert.Null(result.FullName);
         Assert.Null(result.Serial);
         Assert.Null(result.Number);
-        Assert.Null(result.BirthCity);
+        Assert.Null(result.BirthPlace);
         Assert.Null(result.BirthDate);
         Assert.Null(result.Gender);
         Assert.Null(result.IssueDate);
