@@ -64,19 +64,4 @@ public class DocumentEditWindow : Form
         TopMost = true;
         Activate();
     }
-
-    protected override void WndProc(ref Message m)
-    {
-        const int WM_ACTIVATEAPP = 0x001C;
-        
-        if (m.Msg == WM_ACTIVATEAPP)
-        {
-            if (m.WParam != IntPtr.Zero)
-            {
-                TopMost = true;
-            }
-        }
-        
-        base.WndProc(ref m);
-    }
 }
