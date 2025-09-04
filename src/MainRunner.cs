@@ -1,11 +1,10 @@
 ﻿using PassRegulaParser.Core.Services;
 using PassRegulaParser.Core.Handlers;
-using Microsoft.Extensions.Configuration;
 using PassRegulaParser.Config;
 
 namespace PassRegulaParser;
 
-class ServiceRunner
+class MainRunner
 {
     public static void Main(string[] args)
     {

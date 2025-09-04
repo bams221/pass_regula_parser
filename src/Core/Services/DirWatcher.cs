@@ -4,7 +4,7 @@ public class DirWatcher : IDisposable
 {
     public FileSystemWatcher Watcher;
     private readonly Dictionary<string, DateTime> _lastEventTime = [];
-    private readonly object _lock = new();
+    private readonly Lock _lock = new();
 
     public DirWatcher(
         string path,
@@ -48,7 +48,7 @@ public class DirWatcher : IDisposable
         Watcher.EnableRaisingEvents = true;
         try
         {
-           Task.Delay(Timeout.Infinite).Wait();
+            Task.Delay(Timeout.Infinite).Wait();
         }
         catch (TaskCanceledException)
         {
