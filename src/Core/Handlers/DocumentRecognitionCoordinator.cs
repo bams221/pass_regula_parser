@@ -17,7 +17,7 @@ public class DocumentRecognitionCoordinator(string dirPath)
         ProcessRecognition();
     }
 
-    private void ProcessRecognition()
+    public void ProcessRecognition()
     {
         try
         {
